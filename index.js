@@ -80,18 +80,24 @@ module.exports = function (remoteUrl, origin) {
 	  		return deferred.promise;
 	  	})
 	  	.then(function (repo) {
-	  		gutil.log(TAG + 'Adding ' + filePaths.length+ ' files.');
 	  		return repo.addFiles('.');
 	  	})
 	  	.then(function (repo) {
-	  		gutil.log(TAG + 'Commiting');
-	  		return repo.commit('Updated');
+	  		var filesToBeCommitted = Object.keys(repo._staged).length;
+	  		if (filesToBeCommitted === 0) {
+	  			gutil.log(TAG + 'No files have changed.');
+	  			return repo;
+	  		} else {
+		  		gutil.log(TAG + 'Adding ' + filesToBeCommitted + ' files.');
+		  		gutil.log(TAG + 'Commiting');
+		  		return repo.commit('Updated')
+		  		.then(function (repo) {
+		  			gutil.log(TAG + 'Pushing to remote.');
+	  				return repo.push(origin);
+		  		});
+		  	}
 	  	})
-	  	.then(function (repo) {
-	  		gutil.log(TAG + 'Pushing to remote.');
-	  		return repo.push(origin);
-	  	})
-	  	.then(function (repo) {
+	  	.done(function (repo) {
 	  		return callback();
 	  	}, function (err) {
 	  		throw new Error(err);

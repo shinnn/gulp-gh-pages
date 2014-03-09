@@ -54,7 +54,7 @@ describe('git operations on a repo', function () {
 
 	beforeEach(function () {
 		rimraf.sync(tmpDir);
-		promise = git.cloneRepo('git://github.com/rowoot/gulp-gh-pages.git');
+		promise = git.cloneRepo('git://github.com/rowoot/rowoot.github.io.git');
 	});
 
   	it('should create a branch', function (cb) {
@@ -137,7 +137,7 @@ describe('git operations on a repo', function () {
   	it('should commit a file successfully', function (cb) {
 	  	var file = 'test.txt';
 	  	var message = 'commit message';
-	  	var src = path.join(__dirname, 'fixtures', 'junk', file);
+	  	var src = path.join(__dirname, 'fixtures', file);
 	  	var dest = path.join(tmpDir, file);
 
 	    promise
