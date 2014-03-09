@@ -115,10 +115,11 @@ describe('git operations on a repo', function () {
   	});
 
 
-  	it('should add a file successfully and stage it', function (cb) {
+  	it('should add a file successfully, commit it', function (cb) {
 	  	var file = 'test.txt';
 	  	var src = path.join(__dirname, 'fixtures', file);
 	  	var dest = path.join(tmpDir, file);
+	  	var message = 'commit message';
 
 	    promise
 	    .then(function (repo) {
@@ -130,32 +131,37 @@ describe('git operations on a repo', function () {
 	    .then(function (repo) {
 	    	expect(Object.keys(repo._staged).length).toBe(1);
 	    	expect(Object.keys(repo._staged)).toContain(file);
-	    	cb();
-	    });
-  	});
-
-  	it('should commit a file successfully', function (cb) {
-	  	var file = 'test.txt';
-	  	var message = 'commit message';
-	  	var src = path.join(__dirname, 'fixtures', file);
-	  	var dest = path.join(tmpDir, file);
-
-	    promise
-	    .then(function (repo) {
-	    	return copyFileHelper(repo, src, dest);
-	    })
-	    .then(function (repo) {
-	    	return repo.addFiles(path.join(tmpDir , file));
 	    })
 	    .then(function (repo) {
 	    	return repo.commit(message);
 	    })
 	    .then(function (repo) {
 	    	expect(Object.keys(repo._staged).length).toBe(0);
-	    	// expect(repo._commits[0].message).toBe(message);
+	    	expect(repo._commits[0].message).toBe(message);
 	    	cb();
-	    }, function (err) {
-	    	throw new Error(err);
 	    });
   	});
+
+  	// it('should commit a file successfully', function (cb) {
+	  // 	var file = 'test.txt';
+	  // 	var message = 'commit message';
+	  // 	var src = path.join(__dirname, 'fixtures', file);
+	  // 	var dest = path.join(tmpDir, file);
+
+	  //   promise
+	  //   .then(function (repo) {
+	  //   	return copyFileHelper(repo, src, dest);
+	  //   })
+	  //   .then(function (repo) {
+	  //   	return repo.addFiles(path.join(tmpDir , file));
+	  //   })
+	  //   .then(function (repo) {
+	  //   	return repo.commit(message);
+	  //   })
+	  //   .then(function (repo) {
+	  //   	expect(Object.keys(repo._staged).length).toBe(0);
+	  //   	expect(repo._commits[0].message).toBe(message);
+	  //   	cb();
+	  //   });
+  	// });
 });
