@@ -52,7 +52,7 @@ describe('git operations on a repo', function () {
 
 	beforeEach(function () {
 		rimraf.sync(tmpDir);
-		promise = git.cloneRepo('git@github.com:rowoot/rowoot.github.io.git');
+		promise = git.cloneRepo('git://github.com/rowoot/gulp-gh-pages.git');
 	});
 
   	it('should create a branch', function (cb) {
