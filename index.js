@@ -87,10 +87,10 @@ module.exports = function (remoteUrl, origin) {
 	  		gutil.log(TAG + 'Commiting');
 	  		return repo.commit('Updated');
 	  	})
-	  	// .then(function (repo) {
-	  	// 	gutil.log(TAG + 'Pushing to remote.');
-	  	// 	return repo.push(origin);
-	  	// })
+	  	.then(function (repo) {
+	  		gutil.log(TAG + 'Pushing to remote.');
+	  		return repo.push(origin);
+	  	})
 	  	.then(function (repo) {
 	  		return callback();
 	  	}, function (err) {

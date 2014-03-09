@@ -6,6 +6,8 @@ var path    = require('path');
 var rimraf  = require('rimraf');
 var when 	= require('when');
 
+jasmine.getEnv().defaultTimeoutInterval = 10000;
+
 function copyFile (src, dest) {
 	var defer = when.defer();
 	var called = false;
