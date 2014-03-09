@@ -134,28 +134,26 @@ describe('git operations on a repo', function () {
 	    });
   	});
 
-  	it('should commit a file successfully', function (cb) {
-	  	var file = 'test.txt';
-	  	var message = 'commit message';
-	  	var src = path.join(__dirname, 'fixtures', file);
-	  	var dest = path.join(tmpDir, file);
+  	// it('should commit a file successfully', function (cb) {
+	  // 	var file = 'test.txt';
+	  // 	var message = 'commit message';
+	  // 	var src = path.join(__dirname, 'fixtures', file);
+	  // 	var dest = path.join(tmpDir, file);
 
-	    promise
-	    .then(function (repo) {
-	    	return copyFileHelper(repo, src, dest);
-	    })
-	    .then(function (repo) {
-	    	return repo.addFiles(path.join(tmpDir , file));
-	    })
-	    .then(function (repo) {
-	    	return repo.commit(message);
-	    })
-	    .then(function (repo) {
-	    	expect(Object.keys(repo._staged).length).toBe(0);
-	    	// expect(repo._commits[0].message).toBe(message);
-	    	cb();
-	    }, function (err) {
-	    	throw new Error(err);
-	    });
-  	});
+	  //   promise
+	  //   .then(function (repo) {
+	  //   	return copyFileHelper(repo, src, dest);
+	  //   })
+	  //   .then(function (repo) {
+	  //   	return repo.addFiles(path.join(tmpDir , file));
+	  //   })
+	  //   .then(function (repo) {
+	  //   	return repo.commit(message);
+	  //   })
+	  //   .then(function (repo) {
+	  //   	expect(Object.keys(repo._staged).length).toBe(0);
+	  //   	expect(repo._commits[0].message).toBe(message);
+	  //   	cb();
+	  //   });
+  	// });
 });
