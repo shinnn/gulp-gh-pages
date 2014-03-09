@@ -5,10 +5,9 @@ var gulp       	= require('gulp');
 var gutil       = require('gulp-util');
 var through     = require('through2');
 var fs          = require('fs');
-var util        = require('./lib/util');
-var git 	  	= require('./lib/git');
-var os 			= require('os');
-var when 		= require('when');
+var git 	= require('./lib/git');
+var os 	        = require('os');
+var when        = require('when');
 var PluginError = gutil.PluginError;
 
 /*
