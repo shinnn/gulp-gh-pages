@@ -115,11 +115,10 @@ describe('git operations on a repo', function () {
   	});
 
 
-  	it('should add a file successfully, commit it', function (cb) {
+  	it('should add a file successfully and stage it', function (cb) {
 	  	var file = 'test.txt';
 	  	var src = path.join(__dirname, 'fixtures', file);
 	  	var dest = path.join(tmpDir, file);
-	  	var message = 'commit message';
 
 	    promise
 	    .then(function (repo) {
@@ -131,13 +130,6 @@ describe('git operations on a repo', function () {
 	    .then(function (repo) {
 	    	expect(Object.keys(repo._staged).length).toBe(1);
 	    	expect(Object.keys(repo._staged)).toContain(file);
-	    })
-	    .then(function (repo) {
-	    	return repo.commit(message);
-	    })
-	    .then(function (repo) {
-	    	expect(Object.keys(repo._staged).length).toBe(0);
-	    	expect(repo._commits[0].message).toBe(message);
 	    	cb();
 	    });
   	});
