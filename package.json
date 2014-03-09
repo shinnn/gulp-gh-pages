@@ -20,7 +20,7 @@
   },
   "repository": "rowoot/gulp-gh-pages",
   "scripts": {
-    "test": "jasmine-node"
+    "test": "jasmine-node test/"
   },
   "dependencies": {
     "through2": "*",

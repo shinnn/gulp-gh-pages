@@ -5,7 +5,6 @@ var gulp       	= require('gulp');
 var gutil       = require('gulp-util');
 var through     = require('through2');
 var fs          = require('fs');
-var util        = require('./lib/util');
 var git 	  	= require('./lib/git');
 var os 			= require('os');
 var when 		= require('when');
@@ -88,10 +87,10 @@ module.exports = function (remoteUrl, origin) {
 	  		gutil.log(TAG + 'Commiting');
 	  		return repo.commit('Updated');
 	  	})
-	  	.then(function (repo) {
-	  		gutil.log(TAG + 'Pushing to remote.');
-	  		return repo.push(origin);
-	  	})
+	  	// .then(function (repo) {
+	  	// 	gutil.log(TAG + 'Pushing to remote.');
+	  	// 	return repo.push(origin);
+	  	// })
 	  	.then(function (repo) {
 	  		return callback();
 	  	}, function (err) {
