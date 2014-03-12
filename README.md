@@ -28,8 +28,6 @@ gulp.task('deploy', function () {
 
 ### deploy(gitRemoteUrl, remote)
 
-Either define `options.templatePath` or `options.template`. If both are given, `options.templatePath` is used.
-
 #### gitRemoteUrl
 Type: `String`
 Default: `undefined`
