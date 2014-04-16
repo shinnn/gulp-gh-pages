@@ -6,22 +6,34 @@ var gutil       = require('gulp-util');
 var through     = require('through2');
 var fs          = require('fs');
 var git         = require('./lib/git');
-var os          = require('os');
 var when        = require('when');
 var PluginError = gutil.PluginError;
 
 /*
  * Public: Push to gh-pages branch for github
  *
- * remoteUrl- The {String} remote url (github repository) of the project.
+ * options - {Object} that contains all the options of the plugin
+ *   - remoteUrl: The {String} remote url (github repository) of the project,
+ *   - origin: The {String} origin of the git repository (default to `"origin"`),
+ *   - branch: The {String} branch where deploy will by done (default to `"gh-pages"`),
+ *   - cacheDir: {String} where the git repo will be located. (default to a temporary folder)
+ *   - push: {Boolean} to know whether or not the branch should be pushed (default to `true`)
  *
  * Returns `Stream`.
 **/
-module.exports = function (remoteUrl, origin) {
+module.exports = function (options, remote) {
+	if (typeof options === "string") {
+		options = {remoteUrl: options}
+		options.origin = remote
+	}
+	var remoteUrl = options.remoteUrl
+	var origin = options.origin || 'origin'
+	var branch = options.branch || 'gh-pages';
+	var cacheDir = options.cacheDir
+	var push = options.push === undefined ? true : options.push
+
 	var filePaths = [];
-	var tmpDir = path.join(os.tmpdir(), 'tmpRepo');
-	var branchName = 'gh-pages';
-	var TAG = '[gulp-gh-pages]: ';
+	var TAG = '[gulp-' + branch + ']: ';
 
 	function collectFileName (file, enc, callback) {
 		if (file.isNull()) {
@@ -41,16 +53,46 @@ module.exports = function (remoteUrl, origin) {
 
 	function task (callback) {
 		if (filePaths.length === 0) return callback();
-		return git.cloneRepo(remoteUrl)
+		return git.prepareRepo(remoteUrl, cacheDir)
 		.then(function (repo) {
 			gutil.log(TAG + 'Cloning repo');
-			if ( repo._remoteBranches.indexOf('origin/gh-pages') > -1 ) {
-				gutil.log(TAG + 'Checkout branch `gh-pages`');
-				return repo.checkoutBranch(branchName);
-			} else {
-				gutil.log(TAG + 'Create branch `gh-pages` and checkout');
-				return repo.createAndCheckoutBranch(branchName)
+			if ( repo._localBranches.indexOf(branch) > -1 ) {
+				gutil.log(TAG + 'Checkout branch `' + branch + '`');
+				return repo.checkoutBranch(branch);
 			}
+			else if ( repo._remoteBranches.indexOf(origin + '/' + branch) > -1 ) {
+				gutil.log(TAG + 'Checkout remote branch `' + branch + '`');
+				return repo.checkoutBranch(branch);
+			} else {
+				gutil.log(TAG + 'Create branch `' + branch + '` and checkout');
+				return repo.createAndCheckoutBranch(branch)
+			}
+		})
+		.then(function (repo) {
+			var deferred = when.defer();
+			// updating to avoid having local cache not up to date
+			if (cacheDir) {
+				gutil.log(TAG + 'Updating repository');
+				repo._repo.git("pull", function(err) {
+					if (err) {
+						deferred.reject(err);
+						throw new Error(err);
+					}
+					else {
+						deferred.resolve(repo);
+					}
+				})
+			}
+			// no cache, skip this step
+			else {
+				deferred.resolve(repo);
+			}
+
+			return deferred.promise;
+		})
+		.then(function (repo) {
+			// remove all files to stage deleted files
+			return repo.removeFiles('.', {r: true});
 		})
 		.then(function (repo) {
 			var deferred = when.defer();
@@ -62,7 +104,7 @@ module.exports = function (remoteUrl, origin) {
 			});
 
 			srcStream
-			.pipe(gulp.dest(tmpDir))
+			.pipe(gulp.dest(cacheDir))
 			.on('end', function () {
 				deferred.resolve(repo);
 			})
@@ -88,12 +130,15 @@ module.exports = function (remoteUrl, origin) {
 				gutil.log(TAG + 'No files have changed.');
 				return repo;
 			} else {
+				var message = 'Update ' + new Date().toISOString()
 				gutil.log(TAG + 'Adding ' + filesToBeCommitted + ' files.');
-				gutil.log(TAG + 'Commiting');
-				return repo.commit('Updated')
+				gutil.log(TAG + 'Commiting "' + message + '"');
+				return repo.commit( message)
 				.then(function (repo) {
-					gutil.log(TAG + 'Pushing to remote.');
-					return repo.push(origin);
+					if (push) {
+						gutil.log(TAG + 'Pushing to remote.');
+						return repo.push(origin);
+					}
 				});
 			}
 		})

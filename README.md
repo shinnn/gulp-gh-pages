@@ -11,7 +11,7 @@ First, install `gulp-gh-pages` as a development dependency
 npm install --save-dev gulp-gh-pages
 ```
 
-If your repository does not have a `gh-pages` branch, it is advised that you create one first. I used `git subtree push --prefix <dist folder> origin gh-pages`. 
+If your repository does not have a `gh-pages` branch, it is advised that you create one first. I used `git subtree push --prefix <dist folder> origin gh-pages`.
 
 Then define a `deploy` task in your `gulpfile.js` (as below) which can be used to push to `gh-pages` going forward.
 
@@ -26,21 +26,43 @@ gulp.task('deploy', function () {
 
 ## API
 
-### deploy(gitRemoteUrl, remote)
+### deploy(options)
 
-#### gitRemoteUrl
+#### options.remoteUrl
+
 Type: `String`
 Default: `undefined`
-Required: `true`
+_Required: `true`_
 
 Your git remote url. Ensure you have write access to the repository.
 
-#### remote
+#### options.origin
+
 Type: `String`
-Default: `origin`
-Required: `true`
+Default: `"origin"`
 
 Git remote.
+
+#### options.branch
+
+Type: `String`
+Default: `"gh-pages"`
+
+The branch where deploy will by done. Change to "master" for `username.github.io` projects.
+
+#### options.cacheDir
+
+Type: `String`
+Default: a temporary folder
+
+Useful to keep a cache of the repo to avoid fresh clone all the time.
+
+#### options.push
+
+Type: `Boolean`
+Default: `true`
+
+Allow you to make a build on the defined branch without pushing it to master. Useful for dry run.
 
 ## License
 
