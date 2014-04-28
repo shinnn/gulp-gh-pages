@@ -1,43 +1,43 @@
 {
   "name": "gulp-gh-pages",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Gulp plugin to publish to Github pages (gh-pages branch).",
   "keywords": [
-	"git",
-	"gulp",
-	"gulpplugin",
-	"gh-pages",
-	"dist",
-	"github"
+    "git",
+    "gulp",
+    "gulpplugin",
+    "gh-pages",
+    "dist",
+    "github"
   ],
   "author": {
-	"name": "Micheal Benedict (@micheal)",
-	"email": "micheal@visionmasterdesigns.com",
-	"url": "https://github.com/rowoot"
+    "name": "Micheal Benedict (@micheal)",
+    "email": "micheal@visionmasterdesigns.com",
+    "url": "https://github.com/rowoot"
   },
   "bugs": {
-	"url": "https://github.com/rowoot/gulp-gh-pages/issues"
+    "url": "https://github.com/rowoot/gulp-gh-pages/issues"
   },
   "repository": "rowoot/gulp-gh-pages",
   "scripts": {
-	"test": "jasmine-node test/"
+    "test": "jasmine-node test/"
   },
   "dependencies": {
-	"through2": "*",
-	"gulp-util": "~2.2.14",
-	"gift": "~0.4.1",
-	"git-remote-origin-url": "~0.1.1",
-	"rimraf": "~2.2.6",
-	"when": "~3.1.0",
-	"lodash": "~2.4.1",
-	"gulp": "~3.6.2"
+    "through2": "*",
+    "gulp-util": "~2.2.14",
+    "gift": "~0.4.1",
+    "git-remote-origin-url": "~0.1.1",
+    "rimraf": "~2.2.6",
+    "when": "~3.1.0",
+    "lodash": "~2.4.1",
+    "gulp": "~3.6.2"
   },
   "devDependencies": {
-	"jasmine-node": "~1.14.3"
+    "jasmine-node": "~1.14.3"
   },
   "engines": {
-	"node": ">=0.10.0",
-	"npm": ">=1.2.10"
+    "node": ">=0.10.0",
+    "npm": ">=1.2.10"
   },
   "license": "MIT"
 }
