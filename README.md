@@ -20,7 +20,10 @@ var deploy = require("gulp-gh-pages");
 
 gulp.task('deploy', function () {
 	gulp.src("./dist/**/*")
-		.pipe(deploy(gitRemoteUrl, remote));
+		.pipe(deploy({
+			remoteUrl: gitRemoteUrl, 
+			origin: remote
+		}));
 });
 ```
 
