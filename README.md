@@ -26,6 +26,26 @@ gulp.task('deploy', function () {
 
 ## API
 
+Two different signatures are supported.
+
+### deploy(remoteUrl, remote)
+
+#### remoteUrl
+
+Type: `String`
+_Required: `true`_
+
+Your git remote url. Ensure you have write access to the repository.
+
+#### remote
+
+Type: `String`
+Default: `"origin"`
+
+Git remote.
+
+---
+
 ### deploy(options)
 
 #### options.remoteUrl
