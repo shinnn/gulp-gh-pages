@@ -104,7 +104,7 @@ module.exports = function (options, remote) {
 			});
 
 			srcStream
-			.pipe(gulp.dest(cacheDir))
+			.pipe(gulp.dest(repo._repo.path))
 			.on('end', function () {
 				deferred.resolve(repo);
 			})
