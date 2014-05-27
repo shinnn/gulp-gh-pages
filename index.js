@@ -21,7 +21,7 @@ var PluginError = gutil.PluginError;
  *
  * Returns `Stream`.
 **/
-module.exports = function (options) {
+module.exports = function (options, remote) {
 	if (typeof options === "string") {
 		options = {remoteUrl: options}
 		options.origin = remote
@@ -55,7 +55,6 @@ module.exports = function (options) {
 		if (remoteUrl) {
 			var deferred = when.defer();
 			deferred.resolve( remoteUrl );
-			console.log("inn");
 			return deferred.promise;
 		} else {
 			return git.getRemoteUrl(process.cwd(), origin);
@@ -67,7 +66,6 @@ module.exports = function (options) {
 
 		return getRemoteUrl(remoteUrl, origin)
 		.then(function (remoteUrl){
-			console.log("in");
 			gutil.log(TAG + 'Remote URL: ' + remoteUrl);
 			return git.prepareRepo(remoteUrl, cacheDir);
 		})
