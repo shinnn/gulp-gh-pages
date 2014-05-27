@@ -21,7 +21,7 @@ var PluginError = gutil.PluginError;
  *
  * Returns `Stream`.
 **/
-module.exports = function (options, remote) {
+module.exports = function (options) {
 	if (typeof options === "string") {
 		options = {remoteUrl: options}
 		options.origin = remote
@@ -51,9 +51,26 @@ module.exports = function (options, remote) {
 		callback();
 	}
 
+	function getRemoteUrl(remoteUrl, origin) {
+		if (remoteUrl) {
+			var deferred = when.defer();
+			deferred.resolve( remoteUrl );
+			console.log("inn");
+			return deferred.promise;
+		} else {
+			return git.getRemoteUrl(process.cwd(), origin);
+		}
+	}
+
 	function task (callback) {
 		if (filePaths.length === 0) return callback();
-		return git.prepareRepo(remoteUrl, cacheDir)
+
+		return getRemoteUrl(remoteUrl, origin)
+		.then(function (remoteUrl){
+			console.log("in");
+			gutil.log(TAG + 'Remote URL: ' + remoteUrl);
+			return git.prepareRepo(remoteUrl, cacheDir);
+		})
 		.then(function (repo) {
 			gutil.log(TAG + 'Cloning repo');
 			if ( repo._localBranches.indexOf(branch) > -1 ) {
