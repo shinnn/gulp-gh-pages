@@ -157,3 +157,19 @@ describe('git operations on a repo', function () {
 	  //   });
   	// });
 });
+
+describe('git operations on special repositories', function () {
+	var tmpDir = path.join(require('os').tmpdir(), 'tmpRepo');
+
+	beforeEach(function () {
+		rimraf.sync(tmpDir);
+	});
+
+	it('should be initialized on the default branch', function (cb) {
+		var promise = git.prepareRepo('git://github.com/LeaVerou/csss.git');
+		promise.then(function (repo) {
+			expect(repo._currentBranch).toBe('gh-pages');
+			cb();
+		});
+	});
+});
