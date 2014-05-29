@@ -51,11 +51,37 @@ function copyFileHelper (repo, src, dest) {
 describe('git operations on a repo', function () {
 	var promise;
 	var tmpDir = path.join(require('os').tmpdir(), 'tmpRepo');
+	var remoteUrl = 'git://github.com/rowoot/rowoot.github.io.git';
 
 	beforeEach(function () {
 		rimraf.sync(tmpDir);
-		promise = git.prepareRepo('git://github.com/rowoot/rowoot.github.io.git');
+		promise = git.prepareRepo(remoteUrl);
 	});
+
+		it('should determine the remoteUrl of a git repository', function (cb) {
+			promise
+			.then(function (repo) {
+				return git.getRemoteUrl(tmpDir, 'origin');
+			})
+			.then(function (rUrl) {
+				expect(rUrl).toBe(remoteUrl)
+				cb();
+			});
+		});
+
+		it('should throw an error if the provided directory does not contain a git repository', function (cb) {
+			var emptyDir = require('os').tmpdir();
+			promise
+			.then(function (repo) {
+				return git.getRemoteUrl(emptyDir, 'origin');
+			})
+			.then(function (rUrl) {
+				// none
+			}, function(err) {
+				expect(err.message).toBe('Failed to find git repository in ' + emptyDir);
+				cb();
+			});
+		});
 
   	it('should create a branch', function (cb) {
 	  	var branchName = 'new-branch';
