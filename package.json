@@ -29,8 +29,7 @@
     "git-remote-origin-url": "~0.1.1",
     "rimraf": "~2.2.6",
     "when": "~3.1.0",
-    "lodash": "~2.4.1",
-    "gulp": "~3.6.2"
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "jasmine-node": "~1.14.3"
