@@ -22,15 +22,16 @@ var PluginError = gutil.PluginError;
  * Returns `Stream`.
 **/
 module.exports = function (options, remote) {
+	options = options || {};
 	if (typeof options === "string") {
 		options = {remoteUrl: options}
 		options.origin = remote
 	}
-	var remoteUrl = options.remoteUrl
-	var origin = options.origin || 'origin'
+	var remoteUrl = options.remoteUrl;
+	var origin = options.origin || 'origin';
 	var branch = options.branch || 'gh-pages';
-	var cacheDir = options.cacheDir
-	var push = options.push === undefined ? true : options.push
+	var cacheDir = options.cacheDir;
+	var push = options.push === undefined ? true : options.push;
 
 	var filePaths = [];
 	var TAG = '[gulp-' + branch + ']: ';
@@ -53,7 +54,7 @@ module.exports = function (options, remote) {
 
 	function task (callback) {
 		if (filePaths.length === 0) return callback();
-		return git.prepareRepo(remoteUrl, cacheDir)
+		return git.prepareRepo(remoteUrl, origin, cacheDir)
 		.then(function (repo) {
 			gutil.log(TAG + 'Cloning repo');
 			if ( repo._localBranches.indexOf(branch) > -1 ) {
