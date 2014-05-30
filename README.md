@@ -3,6 +3,9 @@
 
 > Gulp plugin to publish to Github pages.
 
+## [Contributors](https://github.com/rowoot/gulp-gh-pages/graphs/contributors)
+Special thanks to the folks who have contributed to this plugin.git
+
 ## Usage
 
 First, install `gulp-gh-pages` as a development dependency
