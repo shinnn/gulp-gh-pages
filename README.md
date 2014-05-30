@@ -20,31 +20,11 @@ var deploy = require("gulp-gh-pages");
 
 gulp.task('deploy', function () {
 	gulp.src("./dist/**/*")
-		.pipe(deploy(gitRemoteUrl, remote));
+		.pipe(deploy(options));
 });
 ```
 
 ## API
-
-Two different signatures are supported.
-
-### deploy(remoteUrl, remote)
-
-#### remoteUrl
-
-Type: `String`
-Default: URL for the remote of the current dir (assumes a git repository)
-
-By default `gulp-gh-pages` assumes the current working directory is a git repository and uses its remote url. If your `gulpfile.js` is not in a git repository, or if you want to push to a different remote url, you can specify it. Ensure you have write access to the repository.
-
-#### remote
-
-Type: `String`
-Default: `"origin"`
-
-Git remote.
-
----
 
 ### deploy(options)
 
