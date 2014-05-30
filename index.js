@@ -22,6 +22,7 @@ var PluginError = gutil.PluginError;
  * Returns `Stream`.
 **/
 module.exports = function (options) {
+	options = options || {};
 	var remoteUrl = options.remoteUrl;
 	var origin = options.origin || 'origin';
 	var branch = options.branch || 'gh-pages';
