@@ -14,8 +14,6 @@ First, install `gulp-gh-pages` as a development dependency
 npm install --save-dev gulp-gh-pages
 ```
 
-If your repository does not have a `gh-pages` branch, it is advised that you create one first. I used `git subtree push --prefix <dist folder> origin gh-pages`.
-
 Then define a `deploy` task in your `gulpfile.js` (as below) which can be used to push to `gh-pages` going forward.
 
 ```javascript
