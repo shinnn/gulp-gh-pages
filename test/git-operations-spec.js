@@ -1,3 +1,5 @@
+/* global jasmine, describe, beforeEach, it, expect */
+
 'use strict';
 
 var git 	= require('../lib/git');
@@ -28,14 +30,14 @@ function copyFile (src, dest) {
 		done(err);
 	});
 
-	write.on('close', function(ex) {
+	write.on('close', function() {
 		defer.resolve();
 	});
 
 	read.pipe(write);
 
 	return defer.promise;
-};
+}
 
 function copyFileHelper (repo, src, dest) {
 	var defer = when.defer();
@@ -43,7 +45,7 @@ function copyFileHelper (repo, src, dest) {
 	.then(function () {
 		defer.resolve(repo);
 	}, function (err) {
-		defer.reject(err)
+		defer.reject(err);
 	});
 	return defer.promise;
 }
@@ -58,30 +60,16 @@ describe('git operations on a repo', function () {
 		promise = git.prepareRepo(remoteUrl);
 	});
 
-		it('should determine the remoteUrl of a git repository', function (cb) {
-			promise
-			.then(function (repo) {
-				return git.getRemoteUrl(tmpDir, 'origin');
-			})
-			.then(function (rUrl) {
-				expect(rUrl).toBe(remoteUrl)
-				cb();
-			});
+	it('should determine the remoteUrl of a git repository', function (cb) {
+		promise
+		.then(function (repo) {
+			return git.getRemoteUrl(repo._repo, 'origin');
+		})
+		.then(function (rUrl) {
+			expect(rUrl).toBe(remoteUrl);
+			cb();
 		});
-
-		it('should throw an error if the provided directory does not contain a git repository', function (cb) {
-			var emptyDir = require('os').tmpdir();
-			promise
-			.then(function (repo) {
-				return git.getRemoteUrl(emptyDir, 'origin');
-			})
-			.then(function (rUrl) {
-				// none
-			}, function(err) {
-				expect(err.message).toBe('Failed to find git repository in ' + emptyDir);
-				cb();
-			});
-		});
+	});
 
   	it('should create a branch', function (cb) {
 	  	var branchName = 'new-branch';

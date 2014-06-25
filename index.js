@@ -1,13 +1,10 @@
-'use strict'
+'use strict';
 
-var path        = require('path');
 var gulp        = require('gulp');
 var gutil       = require('gulp-util');
 var through     = require('through2');
-var fs          = require('fs');
 var git         = require('./lib/git');
 var when        = require('when');
-var PluginError = gutil.PluginError;
 
 /*
  * Public: Push to gh-pages branch for github
@@ -49,7 +46,7 @@ module.exports = function (options) {
 	}
 
 	function task (callback) {
-		if (filePaths.length === 0) return callback();
+		if (filePaths.length === 0) {return callback();}
 		return git.prepareRepo(remoteUrl, origin, cacheDir)
 		.then(function (repo) {
 			gutil.log(TAG + 'Cloning repo');
@@ -62,7 +59,7 @@ module.exports = function (options) {
 				return repo.checkoutBranch(branch);
 			} else {
 				gutil.log(TAG + 'Create branch `' + branch + '` and checkout');
-				return repo.createAndCheckoutBranch(branch)
+				return repo.createAndCheckoutBranch(branch);
 			}
 		})
 		.then(function (repo) {
@@ -78,7 +75,7 @@ module.exports = function (options) {
 					else {
 						deferred.resolve(repo);
 					}
-				})
+				});
 			}
 			// no cache, skip this step
 			else {
@@ -127,7 +124,7 @@ module.exports = function (options) {
 				gutil.log(TAG + 'No files have changed.');
 				return repo;
 			} else {
-				var message = 'Update ' + new Date().toISOString()
+				var message = 'Update ' + new Date().toISOString();
 				gutil.log(TAG + 'Adding ' + filesToBeCommitted + ' files.');
 				gutil.log(TAG + 'Commiting "' + message + '"');
 				return repo.commit( message)
@@ -139,7 +136,7 @@ module.exports = function (options) {
 				});
 			}
 		})
-		.done(function (repo) {
+		.done(function () {
 			return callback();
 		}, function (err) {
 			throw new Error(err);
