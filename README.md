@@ -8,7 +8,20 @@ Special thanks to the folks who have contributed to this plugin.git
 
 ## Usage
 
-First, install `gulp-gh-pages` as a development dependency
+First you need to be sure you have a `gh-pages` branch.
+If you don't have one, you can do the following:
+
+```shell
+git checkout --orphan gh-pages
+git rm -rf .
+touch README.md
+git add README.md
+git commit -m "Init gh-pages"
+git push --set-upstream origin gh-pages
+git checkout master
+```
+
+Install `gulp-gh-pages` as a development dependency
 
 ```shell
 npm install --save-dev gulp-gh-pages
@@ -23,6 +36,12 @@ gulp.task('deploy', function () {
 	gulp.src("./dist/**/*")
 		.pipe(deploy(options));
 });
+```
+
+Now, you should be able to call your task by doing 
+
+```shell
+gulp deploy
 ```
 
 ## API
