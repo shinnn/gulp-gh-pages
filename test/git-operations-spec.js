@@ -53,7 +53,7 @@ function copyFileHelper (repo, src, dest) {
 describe('git operations on a repo', function () {
 	var promise;
 	var tmpDir = path.join(require('os').tmpdir(), 'tmpRepo');
-	var remoteUrl = 'git@github.com:rowoot/test-gh-pages.git';
+	var remoteUrl = 'git://github.com/rowoot/test-gh-pages.git';
 
 	beforeEach(function () {
 		rimraf.sync(tmpDir);
