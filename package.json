@@ -1,6 +1,6 @@
 {
   "name": "gulp-gh-pages",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "description": "Gulp plugin to publish to Github pages (gh-pages branch).",
   "keywords": [
     "git",
