@@ -15,6 +15,7 @@ var when        = require('when');
  *   - branch: The {String} branch where deploy will by done (default to `"gh-pages"`),
  *   - cacheDir: {String} where the git repo will be located. (default to a temporary folder)
  *   - push: {Boolean} to know whether or not the branch should be pushed (default to `true`)
+ *   - message: {String} commit message (default to `"Update [timestamp]"`)
  *
  * Returns `Stream`.
 **/
@@ -25,6 +26,7 @@ module.exports = function (options) {
 	var branch = options.branch || 'gh-pages';
 	var cacheDir = options.cacheDir;
 	var push = options.push === undefined ? true : options.push;
+	var message = options.message || 'Update ' + new Date().toISOString();
 
 	var filePaths = [];
 	var TAG = '[gulp-' + branch + ']: ';
@@ -124,10 +126,9 @@ module.exports = function (options) {
 				gutil.log(TAG + 'No files have changed.');
 				return repo;
 			} else {
-				var message = 'Update ' + new Date().toISOString();
 				gutil.log(TAG + 'Adding ' + filesToBeCommitted + ' files.');
 				gutil.log(TAG + 'Commiting "' + message + '"');
-				return repo.commit( message)
+				return repo.commit(message)
 				.then(function (repo) {
 					if (push) {
 						gutil.log(TAG + 'Pushing to remote.');

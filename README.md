@@ -83,6 +83,13 @@ Default: `true`
 
 Allow you to make a build on the defined branch without pushing it to master. Useful for dry run.
 
+#### options.message
+
+Type: `String`
+Default: `"Update [timestamp]"`
+
+Commit message.
+
 ## License
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
