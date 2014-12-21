@@ -127,7 +127,7 @@ module.exports = function (options) {
 				return repo;
 			} else {
 				gutil.log(TAG + 'Adding ' + filesToBeCommitted + ' files.');
-				gutil.log(TAG + 'Commiting "' + message + '"');
+				gutil.log(TAG + 'Committing "' + message + '"');
 				return repo.commit(message)
 				.then(function (repo) {
 					if (push) {
