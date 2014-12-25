@@ -83,6 +83,13 @@ Default: `true`
 
 Allow you to make a build on the defined branch without pushing it to master. Useful for dry run.
 
+#### options.force
+
+Type: `Boolean`
+Default: `false`
+
+Force adding files to the `gh-pages` branch, even if they are ignored by `.gitignore` or `.gitignore_global`.
+
 #### options.message
 
 Type: `String`

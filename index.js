@@ -26,6 +26,7 @@ module.exports = function (options) {
 	var branch = options.branch || 'gh-pages';
 	var cacheDir = options.cacheDir;
 	var push = options.push === undefined ? true : options.push;
+	var force = options.force === undefined ? false : options.force;
 	var message = options.message || 'Update ' + new Date().toISOString();
 
 	var filePaths = [];
@@ -118,7 +119,10 @@ module.exports = function (options) {
 			return deferred.promise;
 		})
 		.then(function (repo) {
-			return repo.addFiles('.');
+			var addOptions = options.force ? {
+				force: options.force
+			} : undefined;
+			return repo.addFiles('.', addOptions);
 		})
 		.then(function (repo) {
 			var filesToBeCommitted = Object.keys(repo._staged).length;

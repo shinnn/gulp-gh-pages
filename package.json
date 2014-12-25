@@ -32,7 +32,8 @@
     "lodash": "^2.4.1"
   },
   "devDependencies": {
-    "jasmine-node": "~1.14.3"
+    "jasmine-node": "~1.14.3",
+    "mkdirp": "^0.5.0"
   },
   "engines": {
     "node": ">=0.10.0",
