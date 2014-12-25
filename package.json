@@ -22,6 +22,9 @@
   "scripts": {
     "test": "jasmine-node test/"
   },
+  "peerDependencies": {
+    "gulp": "^3.0.0"
+  },
   "dependencies": {
     "through2": "^0.6.1",
     "gulp-util": "^3.0.1",
