@@ -132,7 +132,7 @@ module.exports = function (options) {
 				.then(function (repo) {
 					if (push) {
 						gutil.log(TAG + 'Pushing to remote.');
-						return repo.push(origin);
+						return repo.push();
 					}
 				});
 			}
