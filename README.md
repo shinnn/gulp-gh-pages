@@ -30,11 +30,12 @@ npm install --save-dev gulp-gh-pages
 Then define a `deploy` task in your `gulpfile.js` (as below) which can be used to push to `gh-pages` going forward.
 
 ```javascript
+var gulp   = require('gulp')
 var deploy = require('gulp-gh-pages');
 
 gulp.task('deploy', function () {
 	return gulp.src('./dist/**/*')
-		.pipe(deploy(options));
+		.pipe(deploy());
 });
 ```
 
