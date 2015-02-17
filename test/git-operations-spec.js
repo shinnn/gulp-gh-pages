@@ -96,7 +96,7 @@ describe('git operations on a repo', function () {
 	    .then(function (repo) {
 	    	// none
 	    }, function (err) {
-	    	expect(err.message).toBe('Command failed: error: pathspec \''+branchName+'\' did not match any file(s) known to git.\n');
+	    	expect(err.message.indexOf('error: pathspec \''+branchName+'\' did not match any file(s) known to git.\n')).not.toBe(-1);
 	    	cb();
 	    });
   	});
