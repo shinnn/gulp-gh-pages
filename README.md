@@ -1,9 +1,16 @@
 # gulp-gh-pages
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
 
-> Gulp plugin to publish to Github pages.
+[![NPM version](http://img.shields.io/npm/v/gulp-gh-pages.svg)](https://www.npmjs.com/package/gulp-gh-pages)
+[![Build Status](http://img.shields.io/travis/shinnn/gulp-gh-pages.svg?style=flat)](http://travis-ci.org/shinnn/gulp-gh-pages)
+[![Build status](https://ci.appveyor.com/api/projects/status/iskj8sml9luhkm21?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/gulp-gh-pages)
+[![Coverage Status](https://img.shields.io/coveralls/shinnn/gulp-gh-pages.svg)](https://coveralls.io/r/shinnn/gulp-gh-pages)
+[![Dependency Status](https://img.shields.io/david/shinnn/gulp-gh-pages.svg?label=deps)](https://david-dm.org/shinnn/gulp-gh-pages)
+[![devDependency Status](https://img.shields.io/david/dev/shinnn/gulp-gh-pages.svg?label=devDeps)](https://david-dm.org/shinnn/gulp-gh-pages#info=devDependencies)
 
-## [Contributors](https://github.com/rowoot/gulp-gh-pages/graphs/contributors)
+> [gulp](http://gulpjs.com/) plugin to publish to [Github pages](https://pages.github.com/).
+
+## [Contributors](https://github.com/shinnn/gulp-gh-pages/graphs/contributors)
+
 Special thanks to the folks who have contributed to this plugin.git
 
 ## Usage
@@ -93,16 +100,6 @@ Commit message.
 
 ## License
 
-[MIT License](http://en.wikipedia.org/wiki/MIT_License)
+Copyright (c) 2014 [Micheal Benedict](https://github.com/rowoot), 2015 [Shinnosuke Watanabe](https://github.com/shinnn)
 
-[npm-url]: https://npmjs.org/package/gulp-gh-pages
-[npm-image]: https://badge.fury.io/js/gulp-gh-pages.png
-
-[travis-url]: http://travis-ci.org/rowoot/gulp-gh-pages
-[travis-image]: https://secure.travis-ci.org/rowoot/gulp-gh-pages.png?branch=master
-
-[coveralls-url]: https://coveralls.io/r/rowoot/gulp-gh-pages
-[coveralls-image]: https://coveralls.io/repos/rowoot/gulp-gh-pages/badge.png
-
-[depstat-url]: https://david-dm.org/rowoot/gulp-gh-pages
-[depstat-image]: https://david-dm.org/rowoot/gulp-gh-pages.png
+Licensed under [the MIT License](./LICENSE).

@@ -1,7 +1,7 @@
 {
   "name": "gulp-gh-pages",
   "version": "0.4.0",
-  "description": "Gulp plugin to publish to Github pages (gh-pages branch).",
+  "description": "gulp plugin to publish to Github pages (gh-pages branch)",
   "keywords": [
     "git",
     "gulp",
@@ -10,33 +10,37 @@
     "dist",
     "github"
   ],
+  "repository": "shinnn/gulp-gh-pages",
   "author": {
     "name": "Micheal Benedict (@micheal)",
     "email": "micheal@visionmasterdesigns.com",
     "url": "https://github.com/rowoot"
   },
-  "bugs": {
-    "url": "https://github.com/rowoot/gulp-gh-pages/issues"
-  },
-  "repository": "rowoot/gulp-gh-pages",
+  "contributors": [
+    {
+      "name": "Shinnosuke Watanabe",
+      "url": "https://github.com/shinnn"
+    }
+  ],
   "scripts": {
-    "test": "jasmine-node test/"
+    "test": "jasmine-node test",
+    "test-verbose": "jasmine-node test --verbose",
+    "coverage": "istanbul cover jasmine-node test",
+    "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "dependencies": {
     "through2": "^0.6.1",
     "gulp-util": "^3.0.1",
-    "gift": "^0.4.1",
+    "gift": "^0.5.0",
     "git-remote-origin-url": "^1.0.0",
     "rimraf": "^2.2.6",
     "when": "^3.4.5",
-    "lodash": "^2.4.1"
+    "lodash": "^3.3.0"
   },
   "devDependencies": {
+    "istanbul": "^0.3.6",
+    "istanbul-coveralls": "^1.0.1",
     "jasmine-node": "~1.14.3"
-  },
-  "engines": {
-    "node": ">=0.10.0",
-    "npm": ">=1.2.10"
   },
   "license": "MIT"
 }
