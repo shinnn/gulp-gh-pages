@@ -20,7 +20,7 @@
   },
   "repository": "rowoot/gulp-gh-pages",
   "scripts": {
-    "test": "jasmine-node test/"
+    "test": "git config user.email 'test@test.com';   git config user.name 'test'; jasmine-node test/"
   },
   "dependencies": {
     "through2": "^0.6.1",
