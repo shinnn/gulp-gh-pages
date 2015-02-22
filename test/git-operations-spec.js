@@ -6,6 +6,7 @@ var git 	= require('../lib/git');
 var fs      = require('fs');
 var path    = require('path');
 var rimraf  = require('rimraf');
+var mkdirp  = require('mkdirp');
 var when 	= require('when');
 
 jasmine.getEnv().defaultTimeoutInterval = 10000;
@@ -147,6 +148,182 @@ describe('git operations on a repo', function () {
 	    	cb();
 	    });
   	});
+
+
+	describe('git ignored files', function () {
+		function noop () {}
+
+		function absolutePathFromFixtures (filename) {
+			var absolute = path.join(__dirname, 'fixtures', filename);
+			return absolute;
+		}
+
+		function absolutePathToTmp (filename) {
+			var absolute = path.join(tmpDir, filename);
+			return absolute;
+		}
+
+		function ensureFolder (src, dest) {
+			var srcStat = fs.statSync(src);
+			var dir;
+			if (!srcStat.isDirectory()) {
+				dir = path.dirname(dest);
+			} else {
+				dir = dest;
+			}
+			mkdirp.sync(dir);
+		}
+
+		function promiseCopy (filename) {
+			var src = absolutePathFromFixtures(filename);
+			var dest = absolutePathToTmp(filename);
+			ensureFolder(src, dest);
+			var copier = function (repo) {
+					return copyFileHelper(repo, src, dest);
+				};
+			return copier;
+		}
+
+		function promiseAdd (filename, options) {
+			options = options === undefined ? false : options;
+			var path = absolutePathToTmp(filename);
+			var adder = function (repo) {
+					if (options) {
+						return repo.addFiles(path, options);
+					} else {
+						return repo.addFiles(path);
+					}
+				};
+			return adder;
+		}
+
+		var alreadyAddedCount = 1;
+		var promiseWithIgnoreFile;
+
+		beforeEach(function copyIgnoreFile(done) {
+			var ignoreFile = '.gitignore';
+
+			promiseWithIgnoreFile = promise
+			.then(promiseCopy(ignoreFile))
+			.then(promiseAdd(ignoreFile))
+			.then(function (repo) {
+				// All tests below have to take the fact that the ignore file would be added into consideration.
+				expect(Object.keys(repo._staged).length).toBe(alreadyAddedCount);
+				expect(Object.keys(repo._staged)).toContain(ignoreFile);
+				return repo;
+			})
+			.then(function(repo){
+				done();
+				return repo;
+			});
+		});
+
+		it('should add an unignored file and stage it', function (cb) {
+			var file = 'test.txt';
+			var savedRepo;
+
+			promiseWithIgnoreFile
+			.then(promiseCopy(file))
+			.then(promiseAdd(file))
+			.then(function (repo) {
+				// TODO: check that the error is "correct".
+				expect(Object.keys(repo._staged).length).toBe(alreadyAddedCount + 1);
+				expect(Object.keys(repo._staged)).toContain(file);
+				cb();
+			});
+		});
+
+		it('should not add an ignored file nor stage it', function (cb) {
+			var ignoredFile = 'ignored-file.txt';
+			var savedRepo;
+
+			promiseWithIgnoreFile
+			.then(promiseCopy(ignoredFile))
+			.then(function (repo) {
+				// Saving repo as the next step is expected to throw.
+				savedRepo = repo;
+				return repo;
+			})
+			.then(promiseAdd(ignoredFile))
+			.then(function (repo) {
+				// Test failed, as an error was expected.
+				expect(noop).toThrow();
+				cb();
+			},
+			function (error) {
+				// TODO: check that the error is "correct".
+				expect(error).not.toBeFalsy();
+				return savedRepo;
+			})
+			.then(function (repo) {
+				expect(Object.keys(repo._staged).length).toBe(alreadyAddedCount + 0);
+				expect(Object.keys(repo._staged)).not.toContain(ignoredFile);
+				cb();
+			});
+		});
+
+		it('should not add an ignored file nor stage it but add and stage an unignored file', function (cb) {
+			var ignoredFile = 'ignored-file.txt';
+			var file = 'test.txt';
+			var savedRepo;
+
+			promiseWithIgnoreFile
+			.then(promiseCopy(ignoredFile))
+			.then(promiseCopy(file))
+			.then(promiseAdd(file))
+			.then(function (repo) {
+				// Saving repo as the next step is expected to throw.
+				savedRepo = repo;
+				return repo;
+			})
+			.then(promiseAdd(ignoredFile))
+			.then(function (repo) {
+				// Test failed, as an error was expected.
+				expect(noop).toThrow();
+				cb();
+			},
+			function (error) {
+				// TODO: check that the error is "correct".
+				expect(error).not.toBeFalsy();
+				return savedRepo;
+			})
+			.then(function (repo) {
+				expect(Object.keys(repo._staged).length).toBe(alreadyAddedCount + 1);
+				expect(Object.keys(repo._staged)).not.toContain(ignoredFile);
+				expect(Object.keys(repo._staged)).toContain(file);
+				cb();
+			});
+		});
+
+		it('should force add an ignored file successfully and stage it', function (cb) {
+			var ignoredFile = 'ignored-file.txt';
+
+			promiseWithIgnoreFile
+			.then(promiseCopy(ignoredFile))
+			.then(promiseAdd(ignoredFile, { force: true }))
+			.then(function (repo) {
+				expect(Object.keys(repo._staged).length).toBe(alreadyAddedCount + 1);
+				expect(Object.keys(repo._staged)).toContain(ignoredFile);
+				cb();
+			});
+		});
+
+		it('should force add an ignored folder successfully and stage it', function (cb) {
+			var ignoredFolder = 'ignored-folder/';
+			var ignoredFile = 'ignored-folder/file-in-ignored-folder.txt'
+
+			promiseWithIgnoreFile
+			// The current copy functions do not copy folder structures, so
+			// copying the file and expecting the folder to be created.
+			.then(promiseCopy(ignoredFile))
+			.then(promiseAdd(ignoredFolder, { force: true }))
+			.then(function (repo) {
+				expect(Object.keys(repo._staged).length).toBe(alreadyAddedCount + 1);
+				expect(Object.keys(repo._staged)).toContain(ignoredFile);
+				cb();
+			});
+		});
+	});
 
   	// it('should commit a file successfully', function (cb) {
 	  // 	var file = 'test.txt';

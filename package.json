@@ -40,7 +40,8 @@
   "devDependencies": {
     "istanbul": "^0.3.6",
     "istanbul-coveralls": "^1.0.1",
-    "jasmine-node": "~1.14.3"
+    "jasmine-node": "~1.14.3",
+    "mkdirp": "^0.5.0"
   },
   "license": "MIT"
 }
