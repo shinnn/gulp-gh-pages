@@ -6,4 +6,5 @@ node_js:
   - iojs
   - '0.12'
 after_script:
+  - npm install istanbul istnabul-coveralls
   - npm run-script coveralls
