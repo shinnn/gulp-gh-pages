@@ -49,6 +49,13 @@ module.exports = function (options) {
 	}
 
 	function task (callback) {
+		if (options.cname) {
+			var cnameFile = new gutil.File({
+				path: 'CNAME',
+				contents: new Buffer(options.cname)
+			});
+			filePaths.push(cnameFile);
+		}
 		if (filePaths.length === 0) {return callback();}
 		return git.prepareRepo(remoteUrl, origin, cacheDir)
 		.then(function (repo) {

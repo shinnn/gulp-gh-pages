@@ -84,6 +84,14 @@ Default: a temporary folder
 
 Useful to keep a cache of the repo to avoid fresh clone all the time.
 
+#### options.cname
+
+Type: `String`
+Optional
+
+Placing CNAME file for [Custom domain](https://help.github.com/articles/adding-a-cname-file-to-your-repository) support.
+
+
 #### options.push
 
 Type: `Boolean`
