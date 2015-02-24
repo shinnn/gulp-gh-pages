@@ -13,7 +13,7 @@ environment:
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm install --production
-  - npm install jasmine-node
+  - npm install mkdirp jasmine-node
 
 build: off
 

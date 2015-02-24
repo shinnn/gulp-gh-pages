@@ -11,6 +11,7 @@
     "github"
   ],
   "repository": "shinnn/gulp-gh-pages",
+  "license": "MIT",
   "author": {
     "name": "Micheal Benedict (@micheal)",
     "email": "micheal@visionmasterdesigns.com",
@@ -22,26 +23,40 @@
       "url": "https://github.com/shinnn"
     }
   ],
+  "files": [
+    "index.js",
+    "lib"
+  ],
   "scripts": {
+    "pretest": "jscs *.js lib/*.js test/*.js && eslint *.js lib/*.js test/*.js",
     "test": "jasmine-node test",
     "test-verbose": "jasmine-node test --verbose",
     "coverage": "istanbul cover jasmine-node test",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "dependencies": {
-    "through2": "^0.6.1",
-    "gulp-util": "^3.0.1",
     "gift": "^0.5.0",
     "git-remote-origin-url": "^1.0.0",
+    "gulp-util": "^3.0.1",
+    "lodash": "^3.3.0",
     "rimraf": "^2.2.6",
-    "when": "^3.4.5",
-    "lodash": "^3.3.0"
+    "through2": "^0.6.1",
+    "vinyl-fs": "^0.3.13",
+    "when": "^3.4.5"
   },
   "devDependencies": {
+    "eslint": "^0.15.0",
     "istanbul": "^0.3.6",
     "istanbul-coveralls": "^1.0.1",
-    "jasmine-node": "~1.14.3",
+    "jasmine-node": "^1.14.3",
+    "jscs": "^1.11.3",
     "mkdirp": "^0.5.0"
   },
-  "license": "MIT"
+  "jscsConfig": {
+    "preset": "google",
+    "maximumLineLength": 98,
+    "requireBlocksOnNewline": true,
+    "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
+    "validateLineBreaks": "LF"
+  }
 }

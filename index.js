@@ -1,10 +1,10 @@
 'use strict';
 
-var gulp        = require('gulp');
-var gutil       = require('gulp-util');
-var through     = require('through2');
-var git         = require('./lib/git');
-var when        = require('when');
+var git = require('./lib/git');
+var gutil = require('gulp-util');
+var through = require('through2');
+var when = require('when');
+var vinylFs = require('vinyl-fs');
 
 /*
  * Public: Push to gh-pages branch for github
@@ -19,133 +19,129 @@ var when        = require('when');
  *
  * Returns `Stream`.
 **/
-module.exports = function (options) {
-	options = options || {};
-	var remoteUrl = options.remoteUrl;
-	var origin = options.origin || 'origin';
-	var branch = options.branch || 'gh-pages';
-	var cacheDir = options.cacheDir;
-	var push = options.push === undefined ? true : options.push;
-	var force = options.force === undefined ? false : options.force;
-	var message = options.message || 'Update ' + new Date().toISOString();
+module.exports = function(options) {
+  options = options || {};
+  var remoteUrl = options.remoteUrl;
+  var origin = options.origin || 'origin';
+  var branch = options.branch || 'gh-pages';
+  var cacheDir = options.cacheDir;
+  var push = options.push === undefined ? true : options.push;
+  var message = options.message || 'Update ' + new Date().toISOString();
 
-	var filePaths = [];
-	var TAG = '[gulp-' + branch + ']: ';
+  var filePaths = [];
+  var TAG = '[gulp-' + branch + ']: ';
 
-	function collectFileName (file, enc, callback) {
-		if (file.isNull()) {
-			this.push(file);
-			return callback();
-		}
+  function collectFileName(file, enc, callback) {
+    if (file.isNull()) {
+      callback(null, file);
+      return;
+    }
 
-		if (file.isStream()) {
-			this.emit("error",
-				new gutil.PluginError("gulp-gh-pages", "Stream content is not supported"));
-			return callback();
-		}
+    if (file.isStream()) {
+      callback(new gutil.PluginError('gulp-gh-pages', 'Stream content is not supported'));
+      return;
+    }
 
-		filePaths.push(file);
-		callback();
-	}
+    filePaths.push(file);
+    callback();
+  }
 
-	function task (callback) {
-		if (filePaths.length === 0) {return callback();}
-		return git.prepareRepo(remoteUrl, origin, cacheDir)
-		.then(function (repo) {
-			gutil.log(TAG + 'Cloning repo');
-			if ( repo._localBranches.indexOf(branch) > -1 ) {
-				gutil.log(TAG + 'Checkout branch `' + branch + '`');
-				return repo.checkoutBranch(branch);
-			}
-			else if ( repo._remoteBranches.indexOf(origin + '/' + branch) > -1 ) {
-				gutil.log(TAG + 'Checkout remote branch `' + branch + '`');
-				return repo.checkoutBranch(branch);
-			} else {
-				gutil.log(TAG + 'Create branch `' + branch + '` and checkout');
-				return repo.createAndCheckoutBranch(branch);
-			}
-		})
-		.then(function (repo) {
-			var deferred = when.defer();
-			// updating to avoid having local cache not up to date
-			if (cacheDir) {
-				gutil.log(TAG + 'Updating repository');
-				repo._repo.git("pull", function(err) {
-					if (err) {
-						deferred.reject(err);
-						throw new Error(err);
-					}
-					else {
-						deferred.resolve(repo);
-					}
-				});
-			}
-			// no cache, skip this step
-			else {
-				deferred.resolve(repo);
-			}
+  function task(callback) {
+    if (filePaths.length === 0) {
+      callback();
+      return;
+    }
 
-			return deferred.promise;
-		})
-		.then(function (repo) {
-			// remove all files to stage deleted files
-			return repo.removeFiles('.', {r: true});
-		})
-		.then(function (repo) {
-			var deferred = when.defer();
-			gutil.log(TAG + 'Copying files to repository');
-			// Create temporary stream and write the files in memory
-			var srcStream = through.obj(function (file, enc, callback) {
-				this.push(file);
-				callback();
-			});
+    git.prepareRepo(remoteUrl, origin, cacheDir)
+    .then(function(repo) {
+      gutil.log(TAG + 'Cloning repo');
+      if (repo._localBranches.indexOf(branch) > -1) {
+        gutil.log(TAG + 'Checkout branch `' + branch + '`');
+        return repo.checkoutBranch(branch);
+      }
 
-			srcStream
-			.pipe(gulp.dest(repo._repo.path))
-			.on('end', function () {
-				deferred.resolve(repo);
-			})
-			.on('error', function (err) {
-				deferred.reject(err);
-				throw new Error(err);
-			});
+      if (repo._remoteBranches.indexOf(origin + '/' + branch) > -1) {
+        gutil.log(TAG + 'Checkout remote branch `' + branch + '`');
+        return repo.checkoutBranch(branch);
+      }
 
-			// Write files to stream
-			filePaths.forEach(function (file) {
-				srcStream.write(file);
-			});
-			srcStream.end();
+      gutil.log(TAG + 'Create branch `' + branch + '` and checkout');
+      return repo.createAndCheckoutBranch(branch);
+    })
+    .then(function(repo) {
+      var deferred = when.defer();
+      // updating to avoid having local cache not up to date
+      if (cacheDir) {
+        gutil.log(TAG + 'Updating repository');
+        repo._repo.git('pull', function(err) {
+          if (err) {
+            deferred.reject(err);
+            throw new Error(err);
+          }
 
-			return deferred.promise;
-		})
-		.then(function (repo) {
-			var addOptions = options.force ? {
-				force: options.force
-			} : undefined;
-			return repo.addFiles('.', addOptions);
-		})
-		.then(function (repo) {
-			var filesToBeCommitted = Object.keys(repo._staged).length;
-			if (filesToBeCommitted === 0) {
-				gutil.log(TAG + 'No files have changed.');
-				return repo;
-			} else {
-				gutil.log(TAG + 'Adding ' + filesToBeCommitted + ' files.');
-				gutil.log(TAG + 'Committing "' + message + '"');
-				return repo.commit(message)
-				.then(function (repo) {
-					if (push) {
-						gutil.log(TAG + 'Pushing to remote.');
-						return repo.push(origin);
-					}
-				});
-			}
-		})
-		.done(function () {
-			return callback();
-		}, function (err) {
-			throw new Error(err);
-		});
-	}
+          deferred.resolve(repo);
+        });
+      } else {
+        // no cache, skip this step
+        deferred.resolve(repo);
+      }
+
+      return deferred.promise;
+    })
+    .then(function(repo) {
+      // remove all files to stage deleted files
+      return repo.removeFiles('.', {r: true});
+    })
+    .then(function(repo) {
+      var deferred = when.defer();
+      gutil.log(TAG + 'Copying files to repository');
+
+      // Create temporary stream and write the files in memory
+      var srcStream = through.obj(function(file, enc, done) {
+        this.push(file);
+        done();
+      })
+      .on('end', function() {
+        deferred.resolve(repo);
+      })
+      .on('error', function(err) {
+        deferred.reject(err);
+        throw new Error(err);
+      })
+      .pipe(vinylFs.dest(repo._repo.path));
+
+      // Write files to stream
+      filePaths.forEach(function(file) {
+        srcStream.write(file);
+      });
+
+      srcStream.end();
+
+      return deferred.promise;
+    })
+    .then(function(repo) {
+      return repo.addFiles('.', {force: options.force || false});
+    })
+    .then(function(repo) {
+      var filesToBeCommitted = Object.keys(repo._staged).length;
+      if (filesToBeCommitted === 0) {
+        gutil.log(TAG + 'No files have changed.');
+        return repo;
+      } else {
+        gutil.log(TAG + 'Adding ' + filesToBeCommitted + ' files.');
+        gutil.log(TAG + 'Committing "' + message + '"');
+        return repo.commit(message).then(function(newRepo) {
+          if (push) {
+            gutil.log(TAG + 'Pushing to remote.');
+            return newRepo.push(origin);
+          }
+        });
+      }
+    })
+    .done(callback, function(err) {
+      throw new Error(err);
+    });
+  }
+
   return through.obj(collectFileName, task);
 };
