@@ -249,11 +249,14 @@ describe('gulp-gh-pages', function() {
   it('should emit an error when it fails to create a cache directory', function(done) {
     ghPages({
       remoteUrl: 'https://' + accessToken + '@github.com/shinnn/gulp-gh-pages.git',
-      cacheDir: __filename
+      cacheDir: path.join(__filename, 'dir')
     })
     .on('error', function(err) {
-      assert.equal(err.code, 'ENOTDIR');
+      process.nextTick(assert.bind(null, err.code));
       done();
+    })
+    .on('end', function() {
+      done(new Error('Expected an error.'));
     })
     .end(tmpFile);
   });
@@ -261,8 +264,11 @@ describe('gulp-gh-pages', function() {
   it('should emit an error when the repository doesn\'t exist', function(done) {
     ghPages({remoteUrl: 'https://_/_this_/_repo_/_does_/_not_/_exist_/_.git'})
     .on('error', function(err) {
-      assert(err);
+      process.nextTick(assert.bind(null, err));
       done();
+    })
+    .on('end', function() {
+      done(new Error('Expected an error.'));
     })
     .end(tmpFile);
   });
@@ -270,9 +276,11 @@ describe('gulp-gh-pages', function() {
   it('should emit an error when the user has no permission to push the repo', function(done) {
     ghPages({remoteUrl: 'https://' + accessToken + '@github.com/bot/move.git'})
     .on('error', function(err) {
-      assert(err);
-      assert(/Permission to/.test(err.message));
+      process.nextTick(assert.bind(null, /Permission to/.test(err.message)));
       done();
+    })
+    .on('end', function() {
+      done(new Error('Expected an error.'));
     })
     .end(tmpFile);
   });
@@ -280,9 +288,13 @@ describe('gulp-gh-pages', function() {
   it('should emit an error when the remote URL is not a git repository\'s URL', function(done) {
     ghPages({remoteUrl: 'https://example.org/'})
     .on('error', function(err) {
-      assert(err);
-      assert(/'https:\/\/example\.org\/' not found/.test(err.message));
+      process.nextTick(
+        assert.bind(null, /'https:\/\/example\.org\/' not found/.test(err.message))
+      );
       done();
+    })
+    .on('end', function() {
+      done(new Error('Expected an error.'));
     })
     .end(tmpFile);
   });
@@ -295,6 +307,9 @@ describe('gulp-gh-pages', function() {
       assert(err);
       process.chdir(path.resolve(__dirname, '..'));
       done();
+    })
+    .on('end', function() {
+      done(new Error('Expected an error.'));
     })
     .end(tmpFile);
   });

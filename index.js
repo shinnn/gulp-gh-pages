@@ -49,8 +49,6 @@ module.exports = function gulpGhPages(options) {
       return;
     }
 
-    var self = this;
-
     git.prepareRepo(options.remoteUrl, origin, cacheDir)
     .then(function(repo) {
       gutil.log(TAG + 'Cloning repo');
@@ -143,8 +141,6 @@ module.exports = function gulpGhPages(options) {
         cb();
       }, cb);
     })
-    .catch(function(err) {
-      self.emit('error', err);
-    });
+    .catch(cb);
   });
 };
