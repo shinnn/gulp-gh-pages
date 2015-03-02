@@ -1,17 +1,14 @@
 {
   "name": "gulp-gh-pages",
   "version": "0.4.0",
-  "description": "gulp plugin to publish to Github pages (gh-pages branch)",
-  "keywords": [
-    "git",
-    "gulp",
-    "gulpplugin",
-    "gh-pages",
-    "dist",
-    "github"
-  ],
+  "description": "gulp plugin to publish contents to Github pages",
   "repository": "shinnn/gulp-gh-pages",
-  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/shinnn/gulp-gh-pages/blob/master/LICENSE"
+    }
+  ],
   "author": {
     "name": "Micheal Benedict (@micheal)",
     "email": "micheal@visionmasterdesigns.com",
@@ -22,6 +19,22 @@
       "name": "Shinnosuke Watanabe",
       "url": "https://github.com/shinnn"
     }
+  ],
+  "keywords": [
+    "git",
+    "push",
+    "commit",
+    "branch",
+    "deploy",
+    "deployment",
+    "publish",
+    "site",
+    "website",
+    "gulp",
+    "gulpplugin",
+    "gh-pages",
+    "dist",
+    "github"
   ],
   "files": [
     "index.js",
@@ -35,11 +48,10 @@
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "dependencies": {
-    "es6-promise": "^2.0.1",
     "gift": "^0.5.0",
     "gulp-util": "^3.0.4",
-    "rimraf": "^2.2.6",
-    "through2": "^0.6.1",
+    "rimraf": "^2.2.8",
+    "through2": "^0.6.3",
     "vinyl-fs": "^1.0.0",
     "wrap-promise": "^1.0.0"
   },
