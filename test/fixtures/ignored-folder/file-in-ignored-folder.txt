@@ -1,1 +1,0 @@
-This entire folder is ignored by default.

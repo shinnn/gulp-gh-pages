@@ -1,3 +1,4 @@
+*.txt
 coverage
 node_modules
 temp

@@ -28,10 +28,10 @@
     "lib"
   ],
   "scripts": {
-    "pretest": "jscs *.js lib/*.js test/*.js && eslint *.js lib/*.js test/*.js",
-    "test": "jasmine-node test",
-    "test-verbose": "jasmine-node test --verbose",
-    "coverage": "istanbul cover jasmine-node test",
+    "pretest": "jscs *.js lib/*.js && eslint *.js lib/*.js",
+    "test": "_mocha test.js --timeout 10000",
+    "test-appveyor": "_mocha test.js --timeout 20000 --reporter dot",
+    "coverage": "istanbul cover _mocha test.js -x=test.js -- --timeout 10000",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "dependencies": {
@@ -45,12 +45,17 @@
     "when": "^3.4.5"
   },
   "devDependencies": {
-    "eslint": "^0.15.0",
+    "eslint": "^0.15.1",
+    "graceful-fs": "^3.0.5",
     "istanbul": "^0.3.6",
-    "istanbul-coveralls": "^1.0.1",
-    "jasmine-node": "^1.14.3",
+    "istanbul-coveralls": "^1.0.2",
     "jscs": "^1.11.3",
-    "mkdirp": "^0.5.0"
+    "log-symbols": "^1.0.2",
+    "mocha": "^2.1.0",
+    "node-uuid": "^1.4.2",
+    "octonode": "^0.6.15",
+    "read-remove-file": "^1.0.1",
+    "vinyl": "^0.4.6"
   },
   "jscsConfig": {
     "preset": "google",

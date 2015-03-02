@@ -1,5 +1,6 @@
 env:
   node: true
+  mocha: true
 rules:
   camelcase: 0
   no-underscore-dangle: 0
