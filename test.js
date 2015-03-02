@@ -114,7 +114,7 @@ describe('gulp-gh-pages', function() {
 
       client.post('/repos/shinnn/gulp-gh-pages/git/refs', {
         ref: 'refs/heads/tmp',
-        sha: '563f1ce4dd22b71a4d3ef459793d9818a4482d70'
+        sha: '8d68299897a8ac81d9f2a1d6b355daf0b68b7c8f'
       }, done);
     });
   });
@@ -244,43 +244,6 @@ describe('gulp-gh-pages', function() {
       });
     })
     .end(tmpFile);
-  });
-
-  it('should emit an error when it fails to write files', function(done) {
-    var stream = ghPages({
-      remoteUrl: 'https://' + accessToken + '@github.com/shinnn/gulp-gh-pages.git'
-    })
-    .on('error', function(err) {
-      assert.equal(err.syscall, 'mkdir');
-      done();
-    });
-
-    stream.write(new File({
-      path: 'foo',
-      contents: new Buffer('foo')
-    }));
-
-    stream.end(new File({
-      path: 'foo/bar',
-      contents: new Buffer('bar')
-    }));
-  });
-
-  it('should emit an error when it fails to remove files', function(done) {
-    var stream = ghPages({
-      remoteUrl: 'https://' + accessToken + '@github.com/shinnn/gulp-gh-pages.git',
-      cache: '_df',
-      push: false
-    })
-    .on('error', function(err) {
-      assert(/did not match any files/.test(err.message));
-      done();
-    })
-    .on('data', function() {
-      rimraf.sync('_df');
-    });
-
-    stream.end(tmpFile);
   });
 
   it('should emit an error when it fails to create a cache directory', function(done) {
