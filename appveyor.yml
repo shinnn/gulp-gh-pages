@@ -5,21 +5,31 @@ shallow_clone: true
 
 version: '{build}'
 
+branches:
+  except:
+    - tmp
+    - gh-pages
+
 environment:
   matrix:
-    - nodejs_version: '1.2'
+    - nodejs_version: '1.3'
     - nodejs_version: '0.12'
+  GH_ACCESS_TOKEN:
+      secure: 4ghR4B22y08Vjex2N9eTuXOaWaK4qSHu+AxEjF/jAQ6GRLXW7Mog1sWxYb6un3C2
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - npm install --production
-  - npm install mkdirp jasmine-node
+  - npm install
 
 build: off
 
+before_test:
+  - git config --global user.name "Shinnosuke Watanabe"
+  - git config --global user.email "snnskwtnb@gmail.com"
+
 test_script:
-  - ps: 'npm run-script test-verbose #PowerShell'
-  - cmd: npm run-script test-verbose
+  - ps: 'npm run-script test-appveyor #PowerShell'
+  - cmd: npm run-script test-appveyor
 
 cache:
-  - node_modules
+  - node_modules -> package.json

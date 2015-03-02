@@ -1,9 +1,19 @@
 sudo: false
 git:
   depth: 2
+branches:
+  except:
+    - tmp
+    - gh-pages
 language: node_js
 node_js:
   - iojs
   - '0.12'
+before_script:
+  - git config --global user.name "Shinnosuke Watanabe"
+  - git config --global user.email "snnskwtnb@gmail.com"
 after_script:
   - npm run-script coveralls
+env:
+  global:
+    secure: Fv8nNp9Gwmcr/h8emqdgYLgfO4lV+9FSZFL4Bw+lMbi7kzRsDAsfBdCTbKT+b9P/Q/JnEphX+5mXuo34plCvjwkRWxP/8G+Y89O+VA9GfNOZIUeTBnFo3U4ClhcZdo/Lz1MpCue7gcZit1FQKN9iIJFbLFtcC1ngAGtx76wqnT0=
