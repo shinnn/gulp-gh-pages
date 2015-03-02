@@ -35,14 +35,13 @@
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "dependencies": {
+    "es6-promise": "^2.0.1",
     "gift": "^0.5.0",
-    "git-remote-origin-url": "^1.0.0",
-    "gulp-util": "^3.0.1",
-    "lodash": "^3.3.0",
+    "gulp-util": "^3.0.4",
     "rimraf": "^2.2.6",
     "through2": "^0.6.1",
-    "vinyl-fs": "^0.3.13",
-    "when": "^3.4.5"
+    "vinyl-fs": "^1.0.0",
+    "wrap-promise": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^0.15.1",
