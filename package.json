@@ -30,7 +30,7 @@
   "scripts": {
     "pretest": "jscs *.js lib/*.js && eslint *.js lib/*.js",
     "test": "_mocha test.js --timeout 10000",
-    "test-appveyor": "_mocha test.js --timeout 20000 --reporter dot",
+    "test-appveyor": "_mocha test.js --timeout 50000",
     "coverage": "istanbul cover _mocha test.js -x=test.js -- --timeout 10000",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
