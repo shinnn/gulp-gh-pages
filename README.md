@@ -1,8 +1,8 @@
 # gulp-gh-pages
 
+[![NPM version](http://img.shields.io/npm/v/gulp-gh-pages.svg)](https://www.npmjs.com/package/gulp-gh-pages)
 [![Build Status](http://img.shields.io/travis/shinnn/gulp-gh-pages.svg)](http://travis-ci.org/shinnn/gulp-gh-pages)
 [![Build status](https://ci.appveyor.com/api/projects/status/iskj8sml9luhkm21?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/gulp-gh-pages)
-[![NPM version](http://img.shields.io/npm/v/gulp-gh-pages.svg)](https://www.npmjs.com/package/gulp-gh-pages)
 [![Coverage Status](https://img.shields.io/coveralls/shinnn/gulp-gh-pages.svg)](https://coveralls.io/r/shinnn/gulp-gh-pages)
 [![Dependency Status](https://img.shields.io/david/shinnn/gulp-gh-pages.svg?label=deps)](https://david-dm.org/shinnn/gulp-gh-pages)
 [![devDependency Status](https://img.shields.io/david/dev/shinnn/gulp-gh-pages.svg?label=devDeps)](https://david-dm.org/shinnn/gulp-gh-pages#info=devDependencies)
@@ -19,7 +19,7 @@ npm install --save-dev gulp-gh-pages
 
 ## Usage
 
-Then define a `deploy` task in your `gulpfile.js` (as below) which can be used to push to `gh-pages` going forward.
+Define a `deploy` task in your `gulpfile.js` (as below) which can be used to push to `gh-pages` going forward.
 
 ```javascript
 var gulp   = require('gulp')
