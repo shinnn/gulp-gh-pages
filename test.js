@@ -252,7 +252,7 @@ describe('gulp-gh-pages', function() {
       cacheDir: path.join(__filename, 'dir')
     })
     .on('error', function(err) {
-      process.nextTick(assert.bind(null, err.code));
+      assert(err.code);
       done();
     })
     .on('end', function() {
@@ -264,7 +264,7 @@ describe('gulp-gh-pages', function() {
   it('should emit an error when the repository doesn\'t exist', function(done) {
     ghPages({remoteUrl: 'https://_/_this_/_repo_/_does_/_not_/_exist_/_.git'})
     .on('error', function(err) {
-      process.nextTick(assert.bind(null, err));
+      assert(err);
       done();
     })
     .on('end', function() {
@@ -276,7 +276,7 @@ describe('gulp-gh-pages', function() {
   it('should emit an error when the user has no permission to push the repo', function(done) {
     ghPages({remoteUrl: 'https://' + accessToken + '@github.com/bot/move.git'})
     .on('error', function(err) {
-      process.nextTick(assert.bind(null, /Permission to/.test(err.message)));
+      assert(/Permission to/.test(err.message));
       done();
     })
     .on('end', function() {
@@ -288,9 +288,7 @@ describe('gulp-gh-pages', function() {
   it('should emit an error when the remote URL is not a git repository\'s URL', function(done) {
     ghPages({remoteUrl: 'https://example.org/'})
     .on('error', function(err) {
-      process.nextTick(
-        assert.bind(null, /'https:\/\/example\.org\/' not found/.test(err.message))
-      );
+      assert(/'https:\/\/example\.org\/' not found/.test(err.message));
       done();
     })
     .on('end', function() {

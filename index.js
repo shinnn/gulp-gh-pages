@@ -27,7 +27,12 @@ module.exports = function gulpGhPages(options) {
   var message = options.message || 'Update ' + new Date().toISOString();
 
   var filePaths = [];
-  var TAG = '[gulp-' + branch + ']: ';
+  var TAG;
+  if (branch !== 'gh-pages') {
+    TAG = '[gh-pages (' + branch + ')]';
+  } else {
+    TAG = '[gh-pages]';
+  }
 
   return through.obj(function collectFiles(file, enc, cb) {
     if (file.isNull()) {
@@ -45,31 +50,32 @@ module.exports = function gulpGhPages(options) {
 
   }, function publish(cb) {
     if (filePaths.length === 0) {
+      gutil.log(TAG, 'No files in the stream.');
       cb();
       return;
     }
 
     git.prepareRepo(options.remoteUrl, origin, cacheDir)
     .then(function(repo) {
-      gutil.log(TAG + 'Cloning repo');
+      gutil.log(TAG, 'Cloning repo');
       if (repo._localBranches.indexOf(branch) > -1) {
-        gutil.log(TAG + 'Checkout branch `' + branch + '`');
+        gutil.log(TAG, 'Checkout branch `' + branch + '`');
         return repo.checkoutBranch(branch);
       }
 
       if (repo._remoteBranches.indexOf(origin + '/' + branch) > -1) {
-        gutil.log(TAG + 'Checkout remote branch `' + branch + '`');
+        gutil.log(TAG, 'Checkout remote branch `' + branch + '`');
         return repo.checkoutBranch(branch);
       }
 
-      gutil.log(TAG + 'Create branch `' + branch + '` and checkout');
+      gutil.log(TAG, 'Create branch `' + branch + '` and checkout');
       return repo.createAndCheckoutBranch(branch);
     })
     .then(function(repo) {
       return wrapPromise(function(resolve, reject) {
         if (cacheDir) {
           // updating to avoid having local cache not up to date
-          gutil.log(TAG + 'Updating repository');
+          gutil.log(TAG, 'Updating repository');
           repo._repo.git('pull', function(err) {
             if (err) {
               reject(err);
@@ -95,7 +101,7 @@ module.exports = function gulpGhPages(options) {
       });
     })
     .then(function(repo) {
-      gutil.log(TAG + 'Copying files to repository');
+      gutil.log(TAG, 'Copying files to repository');
 
       return wrapPromise(function(resolve, reject) {
         var destStream = vinylFs.dest(repo._repo.path)
@@ -117,16 +123,16 @@ module.exports = function gulpGhPages(options) {
     .then(function(repo) {
       var filesToBeCommitted = Object.keys(repo._staged).length;
       if (filesToBeCommitted === 0) {
-        gutil.log(TAG + 'No files have changed.');
+        gutil.log(TAG, 'No files have changed.');
         cb();
         return;
       }
 
-      gutil.log(TAG + 'Adding ' + filesToBeCommitted + ' files.');
-      gutil.log(TAG + 'Committing "' + message + '"');
+      gutil.log(TAG, 'Adding ' + filesToBeCommitted + ' files.');
+      gutil.log(TAG, 'Committing "' + message + '"');
       repo.commit(message).then(function(newRepo) {
         if (options.push === undefined || options.push) {
-          gutil.log(TAG + 'Pushing to remote.');
+          gutil.log(TAG, 'Pushing to remote.');
           newRepo._repo.git('push', {
             'set-upstream': true
           }, [origin, newRepo._currentBranch], function(err) {
@@ -141,6 +147,10 @@ module.exports = function gulpGhPages(options) {
         cb();
       }, cb);
     })
-    .catch(cb);
+    .catch(function(err) {
+      setImmediate(function() {
+        cb(new gutil.PluginError('gulp-gh-pages', err));
+      });
+    });
   });
 };
