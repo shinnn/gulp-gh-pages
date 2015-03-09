@@ -42,28 +42,28 @@
   ],
   "scripts": {
     "pretest": "jscs *.js lib/*.js && eslint *.js lib/*.js",
-    "test": "_mocha test.js --timeout 10000",
-    "test-appveyor": "_mocha test.js --timeout 50000",
+    "test": "mocha test.js --timeout 10000",
+    "test-appveyor": "mocha test.js --timeout 50000",
     "coverage": "istanbul cover _mocha test.js -x=test.js -- --timeout 10000",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "dependencies": {
     "gift": "^0.5.0",
     "gulp-util": "^3.0.4",
-    "rimraf": "^2.2.8",
+    "rimraf": "^2.3.1",
     "through2": "^0.6.3",
     "vinyl-fs": "^1.0.0",
     "wrap-promise": "^1.0.0"
   },
   "devDependencies": {
-    "eslint": "^0.15.1",
+    "eslint": "^0.16.1",
     "graceful-fs": "^3.0.5",
-    "istanbul": "^0.3.6",
+    "istanbul": "^0.3.7",
     "istanbul-coveralls": "^1.0.2",
     "jscs": "^1.11.3",
     "log-symbols": "^1.0.2",
-    "mocha": "^2.1.0",
-    "node-uuid": "^1.4.2",
+    "mocha": "^2.2.1",
+    "node-uuid": "^1.4.3",
     "octonode": "^0.6.15",
     "read-remove-file": "^1.0.1",
     "vinyl": "^0.4.6"
