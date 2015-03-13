@@ -7,7 +7,7 @@
 [![Dependency Status](https://img.shields.io/david/shinnn/gulp-gh-pages.svg?label=deps)](https://david-dm.org/shinnn/gulp-gh-pages)
 [![devDependency Status](https://img.shields.io/david/dev/shinnn/gulp-gh-pages.svg?label=devDeps)](https://david-dm.org/shinnn/gulp-gh-pages#info=devDependencies)
 
-[gulp](http://gulpjs.com/) plugin to publish contetns to [Github pages](https://pages.github.com/)
+[gulp](http://gulpjs.com/) plugin to publish contents to [Github pages](https://pages.github.com/)
 
 ## Installation
 
@@ -31,7 +31,7 @@ gulp.task('deploy', function() {
 });
 ```
 
-Now, you should be able to call your task by doing 
+Now, you should be able to call your task by doing:
 
 ```she
 gulp deploy
@@ -72,9 +72,9 @@ The branch where deploy will by done. Change to "master" for `username.github.io
 #### options.cacheDir
 
 Type: `String`  
-Default: a temporary folder
+Default: `.publish`
 
-Useful to keep a cache of the repo to avoid fresh clone all the time.
+Set the directory path to keep a cache of the repository. If it doesn't exist, gulp-gh-pages automatically create it.
 
 #### options.push
 

@@ -50,13 +50,13 @@
   "dependencies": {
     "gift": "^0.5.0",
     "gulp-util": "^3.0.4",
-    "rimraf": "^2.3.1",
+    "rimraf": "^2.3.2",
     "through2": "^0.6.3",
     "vinyl-fs": "^1.0.0",
     "wrap-promise": "^1.0.0"
   },
   "devDependencies": {
-    "eslint": "^0.16.1",
+    "eslint": "^0.16.2",
     "graceful-fs": "^3.0.5",
     "istanbul": "^0.3.7",
     "istanbul-coveralls": "^1.0.2",
@@ -64,7 +64,7 @@
     "log-symbols": "^1.0.2",
     "mocha": "^2.2.1",
     "node-uuid": "^1.4.3",
-    "octonode": "^0.6.15",
+    "octonode": "^0.6.16",
     "read-remove-file": "^1.0.1",
     "vinyl": "^0.4.6"
   },

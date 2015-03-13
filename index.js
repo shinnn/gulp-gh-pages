@@ -23,7 +23,6 @@ module.exports = function gulpGhPages(options) {
   options = options || {};
   var origin = options.origin || 'origin';
   var branch = options.branch || 'gh-pages';
-  var cacheDir = options.cacheDir;
   var message = options.message || 'Update ' + new Date().toISOString();
 
   var filePaths = [];
@@ -55,7 +54,9 @@ module.exports = function gulpGhPages(options) {
       return;
     }
 
-    git.prepareRepo(options.remoteUrl, origin, cacheDir)
+    var newBranchCreated = false;
+
+    git.prepareRepo(options.remoteUrl, origin, options.cacheDir || '.publish')
     .then(function(repo) {
       gutil.log(TAG, 'Cloning repo');
       if (repo._localBranches.indexOf(branch) > -1) {
@@ -69,23 +70,25 @@ module.exports = function gulpGhPages(options) {
       }
 
       gutil.log(TAG, 'Create branch `' + branch + '` and checkout');
+      newBranchCreated = true;
       return repo.createAndCheckoutBranch(branch);
     })
     .then(function(repo) {
       return wrapPromise(function(resolve, reject) {
-        if (cacheDir) {
-          // updating to avoid having local cache not up to date
-          gutil.log(TAG, 'Updating repository');
-          repo._repo.git('pull', function(err) {
-            if (err) {
-              reject(err);
-              return;
-            }
-            resolve(repo);
-          });
-        } else {
+        if (newBranchCreated) {
           resolve(repo);
+          return;
         }
+
+        // updating to avoid having local cache not up to date
+        gutil.log(TAG, 'Updating repository');
+        repo._repo.git('pull', function(err) {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(repo);
+        });
       });
     })
     .then(function(repo) {

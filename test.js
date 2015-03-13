@@ -14,7 +14,7 @@ var rimraf = require('rimraf');
 var through = require('through2');
 var uuid = require('node-uuid');
 
-var tmpDir = path.join(require('os').tmpdir(), 'tmpRepo');
+var tmpDir = '.publish';
 var tmpStr = uuid.v4();
 var tmpFile = new File({
   path: tmpStr,
@@ -76,11 +76,13 @@ describe('git operations on a repo', function() {
   });
 
   it('should throw an error when checking out a non existent branch', function(done) {
-    git.prepareRepo('https://github.com/shinnn/gulp-gh-pages.git')
+    git.prepareRepo('https://github.com/shinnn/gulp-gh-pages.git', 'origin', '.publish')
     .then(function(repo) {
       return repo.checkoutBranch('non-existent-branch');
     })
-    .catch(function(err) {
+    .then(function() {
+      done(new Error('Expected an error.'));
+    }, function(err) {
       var expectedMsg = 'error: pathspec \'' +
                         'non-existent-branch' +
                         '\' did not match any file(s) known to git.\n';
@@ -96,7 +98,7 @@ describe('git operations on special repositories', function() {
   });
 
   it('should be initialized on the default branch', function(done) {
-    git.prepareRepo('https://github.com/LeaVerou/csss.git')
+    git.prepareRepo('https://github.com/LeaVerou/csss.git', null, '.publish')
     .then(function(repo) {
       assert.equal(repo._currentBranch, 'gh-pages');
       done();
@@ -106,6 +108,8 @@ describe('git operations on special repositories', function() {
 
 describe('gulp-gh-pages', function() {
   before(function(done) {
+    rimraf.sync(tmpDir);
+
     client.del('/repos/shinnn/gulp-gh-pages/git/refs/heads/tmp', {}, function(err) {
       if (err && err.message !== 'Reference does not exist') {
         done(err);
