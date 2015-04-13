@@ -68,6 +68,10 @@
     "read-remove-file": "^1.0.1",
     "vinyl": "^0.4.6"
   },
+  "engine-strict": {
+    "node": ">=0.10.0",
+    "npm": ">=2.6.0"
+  },
   "jscsConfig": {
     "preset": "google",
     "maximumLineLength": 98,
