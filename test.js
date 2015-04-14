@@ -31,6 +31,8 @@ var files = [
   }),
   tmpFile
 ];
+var tmpRepoName = 'shinnn/css-wide-keywords';
+var remoteUrl;
 
 var accessToken = process.env.GH_ACCESS_TOKEN;
 var client;
@@ -42,6 +44,7 @@ before(function(done) {
       ' Set Github Access token from the environment variable'
     );
     client = github.client(accessToken);
+    remoteUrl = 'https://' + accessToken + '@github.com/' + tmpRepoName + '.git';
     done();
 
   } else {
@@ -65,6 +68,7 @@ before(function(done) {
       }
 
       client = github.client(accessToken);
+      remoteUrl = 'https://' + accessToken + '@github.com/' + tmpRepoName + '.git';
       done();
     });
   }
@@ -76,7 +80,7 @@ describe('git operations on a repo', function() {
   });
 
   it('should throw an error when checking out a non existent branch', function(done) {
-    git.prepareRepo('https://github.com/shinnn/gulp-gh-pages.git', 'origin', '.publish')
+    git.prepareRepo('https://github.com/' + tmpRepoName + '.git', 'origin', '.publish')
     .then(function(repo) {
       return repo.checkoutBranch('non-existent-branch');
     })
@@ -110,15 +114,15 @@ describe('gulp-gh-pages', function() {
   before(function(done) {
     rimraf.sync(tmpDir);
 
-    client.del('/repos/shinnn/gulp-gh-pages/git/refs/heads/tmp', {}, function(err) {
+    client.del('/repos/' + tmpRepoName + '/git/refs/heads/tmp', {}, function(err) {
       if (err && err.message !== 'Reference does not exist') {
         done(err);
         return;
       }
 
-      client.post('/repos/shinnn/gulp-gh-pages/git/refs', {
+      client.post('/repos/' + tmpRepoName + '/git/refs', {
         ref: 'refs/heads/tmp',
-        sha: '8d68299897a8ac81d9f2a1d6b355daf0b68b7c8f'
+        sha: '8d6c241faa1246137a57b9f3cefcafbf30f14966'
       }, done);
     });
   });
@@ -144,7 +148,7 @@ describe('gulp-gh-pages', function() {
 
   it('should push commits to an existing gh-pages branch', function(done) {
     var stream = ghPages({
-      remoteUrl: 'https://' + accessToken + '@github.com/shinnn/gulp-gh-pages.git',
+      remoteUrl: remoteUrl,
       branch: 'tmp',
       message: '[ci skip] temporary commit ("tmp" branch)'
     })
@@ -169,7 +173,7 @@ describe('gulp-gh-pages', function() {
 
   it('should not push any commits when no files has been changed', function(done) {
     var stream = ghPages({
-      remoteUrl: 'https://' + accessToken + '@github.com/shinnn/gulp-gh-pages.git',
+      remoteUrl: remoteUrl,
       branch: 'tmp'
     })
     .on('error', done)
@@ -186,14 +190,14 @@ describe('gulp-gh-pages', function() {
   });
 
   it('should create and checkout a branch', function(done) {
-    client.del('/repos/shinnn/gulp-gh-pages/git/refs/heads/new', {}, function(err) {
+    client.del('/repos/' + tmpRepoName + '/git/refs/heads/new', {}, function(err) {
       if (err && err.message !== 'Reference does not exist') {
         done(err);
         return;
       }
 
       var stream = ghPages({
-        remoteUrl: 'https://' + accessToken + '@github.com/shinnn/gulp-gh-pages.git',
+        remoteUrl: remoteUrl,
         branch: 'new',
         message: '[ci skip] temporary commit ("new" branch)',
         push: true,
@@ -204,7 +208,7 @@ describe('gulp-gh-pages', function() {
         assert(file.isBuffer());
       })
       .on('end', function() {
-        client.del('/repos/shinnn/gulp-gh-pages/git/refs/heads/new', {}, function(reqErr) {
+        client.del('/repos/' + tmpRepoName + '/git/refs/heads/new', {}, function(reqErr) {
           if (reqErr && reqErr.message !== 'Reference does not exist') {
             done(reqErr);
             return;
@@ -232,7 +236,7 @@ describe('gulp-gh-pages', function() {
 
   it('should specify the cache directory path with `cacheDir` option', function(done) {
     ghPages({
-      remoteUrl: 'https://' + accessToken + '@github.com/shinnn/gulp-gh-pages.git',
+      remoteUrl: remoteUrl,
       cacheDir: '__cache__',
       push: false
     })
@@ -252,7 +256,7 @@ describe('gulp-gh-pages', function() {
 
   it('should emit an error when it fails to create a cache directory', function(done) {
     ghPages({
-      remoteUrl: 'https://' + accessToken + '@github.com/shinnn/gulp-gh-pages.git',
+      remoteUrl: remoteUrl,
       cacheDir: path.join(__filename, 'dir')
     })
     .on('error', function(err) {
