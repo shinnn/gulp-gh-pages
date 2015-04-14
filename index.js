@@ -25,7 +25,7 @@ module.exports = function gulpGhPages(options) {
   var branch = options.branch || 'gh-pages';
   var message = options.message || 'Update ' + new Date().toISOString();
 
-  var filePaths = [];
+  var files = [];
   var TAG;
   if (branch !== 'gh-pages') {
     TAG = '[gh-pages (' + branch + ')]';
@@ -44,11 +44,11 @@ module.exports = function gulpGhPages(options) {
       return;
     }
 
-    filePaths.push(file);
-    cb();
+    files.push(file);
+    cb(null, file);
 
   }, function publish(cb) {
-    if (filePaths.length === 0) {
+    if (files.length === 0) {
       gutil.log(TAG, 'No files in the stream.');
       cb();
       return;
@@ -113,7 +113,7 @@ module.exports = function gulpGhPages(options) {
           resolve(repo);
         });
 
-        filePaths.forEach(function(file) {
+        files.forEach(function(file) {
           destStream.write(file);
         });
 
