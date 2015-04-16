@@ -48,7 +48,7 @@
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "dependencies": {
-    "gift": "^0.5.0",
+    "gift": "^0.6.0",
     "gulp-util": "^3.0.4",
     "rimraf": "^2.3.2",
     "through2": "^0.6.5",
