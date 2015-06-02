@@ -9,7 +9,7 @@ skip_tags: true
 
 environment:
   matrix:
-    - nodejs_version: '1'
+    - nodejs_version: '2'
     - nodejs_version: '0'
   GH_ACCESS_TOKEN:
       secure: 4ghR4B22y08Vjex2N9eTuXOaWaK4qSHu+AxEjF/jAQ6GRLXW7Mog1sWxYb6un3C2
