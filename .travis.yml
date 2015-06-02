@@ -1,10 +1,6 @@
 sudo: false
 git:
   depth: 2
-branches:
-  except:
-    - tmp
-    - gh-pages
 language: node_js
 node_js:
   - iojs
