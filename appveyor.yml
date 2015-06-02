@@ -8,14 +8,11 @@ version: '{build}'
 skip_tags: true
 
 environment:
-  matrix:
-    - nodejs_version: '2'
-    - nodejs_version: '0'
   GH_ACCESS_TOKEN:
-      secure: 4ghR4B22y08Vjex2N9eTuXOaWaK4qSHu+AxEjF/jAQ6GRLXW7Mog1sWxYb6un3C2
+    secure: 4ghR4B22y08Vjex2N9eTuXOaWaK4qSHu+AxEjF/jAQ6GRLXW7Mog1sWxYb6un3C2
 
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node 2
   - npm install
 
 build: off
@@ -25,7 +22,7 @@ before_test:
   - git config --global user.email "snnskwtnb@gmail.com"
 
 test_script:
-  - npm run-script test-appveyor
+  - node node_modules/.bin/_mocha --timeout 50000
 
 cache:
   - node_modules -> package.json
