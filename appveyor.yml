@@ -22,7 +22,7 @@ before_test:
   - git config --global user.email "snnskwtnb@gmail.com"
 
 test_script:
-  - node node_modules/.bin/_mocha --timeout 50000
+  - npm run-script test-only
 
 cache:
   - node_modules -> package.json
