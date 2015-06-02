@@ -3,22 +3,10 @@
   "version": "0.5.1",
   "description": "gulp plugin to publish contents to Github pages",
   "repository": "shinnn/gulp-gh-pages",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/shinnn/gulp-gh-pages/blob/master/LICENSE"
-    }
-  ],
-  "author": {
-    "name": "Micheal Benedict (@micheal)",
-    "email": "micheal@visionmasterdesigns.com",
-    "url": "https://github.com/rowoot"
-  },
+  "license": "MIT",
+  "author": "Micheal Benedict <micheal@visionmasterdesigns.com> (https://github.com/rowoot)",
   "contributors": [
-    {
-      "name": "Shinnosuke Watanabe",
-      "url": "https://github.com/shinnn"
-    }
+    "Shinnosuke Watanabe (https://github.com/shinnn)"
   ],
   "keywords": [
     "git",
@@ -41,38 +29,31 @@
     "lib"
   ],
   "scripts": {
-    "pretest": "jscs index.js test.js lib/git.js && eslint index.js test.js lib/git.js",
-    "test": "mocha test.js --timeout 10000",
+    "pretest": "eslint --config node_modules/@shinnn/eslintrc-node/rc.json --env mocha --rule 'no-underscore-dangle: 0' --rule 'camelcase: 0' index.js test.js lib",
+    "test": "mocha test.js --timeout 30000",
     "test-appveyor": "mocha test.js --timeout 50000",
-    "coverage": "istanbul cover _mocha test.js -x=test.js -- --timeout 10000",
+    "coverage": "istanbul cover _mocha test.js -x=test.js -- --timeout 30000",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "dependencies": {
     "gift": "^0.6.0",
-    "gulp-util": "^3.0.4",
-    "rimraf": "^2.3.2",
+    "gulp-util": "^3.0.5",
+    "rimraf": "^2.3.4",
     "through2": "^0.6.5",
     "vinyl-fs": "^1.0.0",
     "wrap-promise": "^1.0.0"
   },
   "devDependencies": {
-    "eslint": "^0.19.0",
-    "graceful-fs": "^3.0.6",
-    "istanbul": "^0.3.13",
+    "@shinnn/eslintrc-node": "^1.0.2",
+    "eslint": "^0.22.1",
+    "graceful-fs": "^3.0.8",
+    "istanbul": "^0.3.14",
     "istanbul-coveralls": "^1.0.2",
-    "jscs": "^1.12.0",
     "log-symbols": "^1.0.2",
-    "mocha": "^2.2.4",
+    "mocha": "^2.2.5",
     "node-uuid": "^1.4.3",
-    "octonode": "^0.6.16",
-    "read-remove-file": "^1.0.1",
+    "octonode": "^0.6.17",
+    "read-remove-file": "^2.0.0",
     "vinyl": "^0.4.6"
-  },
-  "jscsConfig": {
-    "preset": "google",
-    "maximumLineLength": 98,
-    "requireBlocksOnNewline": true,
-    "requireCamelCaseOrUpperCaseIdentifiers": "ignoreProperties",
-    "validateLineBreaks": "LF"
   }
 }
