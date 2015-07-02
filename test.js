@@ -9,9 +9,9 @@ var ghPages = require('./');
 var git = require('./lib/git');
 var github = require('octonode');
 var logSymbols = require('log-symbols');
+var PassThrough = require('readable-stream/passthrough');
 var readRemoveFile = require('read-remove-file');
 var rimraf = require('rimraf');
-var through = require('through2');
 var uuid = require('node-uuid');
 
 var tmpDir = '.publish';
@@ -143,7 +143,7 @@ describe('gulp-gh-pages', function() {
       assert.equal(err.message, 'Stream content is not supported');
       done();
     })
-    .end(new File({contents: through.obj()}));
+    .end(new File({contents: new PassThrough({objectMode: true})}));
   });
 
   it('should push commits to an existing gh-pages branch', function(done) {

@@ -37,23 +37,23 @@
   },
   "dependencies": {
     "gift": "^0.6.0",
-    "gulp-util": "^3.0.5",
-    "rimraf": "^2.3.4",
-    "through2": "^0.6.5",
+    "gulp-util": "^3.0.6",
+    "readable-stream": "^2.0.1",
+    "rimraf": "^2.4.1",
     "vinyl-fs": "^1.0.0",
-    "wrap-promise": "^1.0.0"
+    "wrap-promise": "^1.0.1"
   },
   "devDependencies": {
     "@shinnn/eslintrc-node": "^1.0.2",
-    "eslint": "^0.22.1",
-    "graceful-fs": "^3.0.8",
-    "istanbul": "^0.3.14",
-    "istanbul-coveralls": "^1.0.2",
+    "eslint": "^0.24.0",
+    "graceful-fs": "^4.1.2",
+    "istanbul": "^0.3.17",
+    "istanbul-coveralls": "^1.0.3",
     "log-symbols": "^1.0.2",
     "mocha": "^2.2.5",
     "node-uuid": "^1.4.3",
-    "octonode": "^0.6.17",
+    "octonode": "^0.6.18",
     "read-remove-file": "^2.0.0",
-    "vinyl": "^0.4.6"
+    "vinyl": "^0.5.0"
   }
 }
