@@ -48,7 +48,6 @@ module.exports = function gulpGhPages(options) {
 
       files.push(file);
       cb(null, file);
-
     },
     flush: function publish(cb) {
       if (files.length === 0) {
@@ -112,7 +111,7 @@ module.exports = function gulpGhPages(options) {
         return wrapPromise(function(resolve, reject) {
           var destStream = vinylFs.dest(repo._repo.path)
           .on('error', reject)
-          .on('end', function() {
+          .on('finish', function() {
             resolve(repo);
           });
 

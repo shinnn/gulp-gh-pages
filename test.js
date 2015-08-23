@@ -46,7 +46,6 @@ before(function(done) {
     client = github.client(accessToken);
     remoteUrl = 'https://' + accessToken + '@github.com/' + tmpRepoName + '.git';
     done();
-
   } else {
     var accessTokenFile = 'gh-access-token.txt';
 
