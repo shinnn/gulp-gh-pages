@@ -111,9 +111,10 @@ module.exports = function gulpGhPages(options) {
         return wrapPromise(function(resolve, reject) {
           var destStream = vinylFs.dest(repo._repo.path)
           .on('error', reject)
-          .on('finish', function() {
+          .on('end', function() {
             resolve(repo);
-          });
+          })
+          .resume();
 
           files.forEach(function(file) {
             destStream.write(file);
