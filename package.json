@@ -37,22 +37,22 @@
   },
   "dependencies": {
     "gift": "^0.6.1",
-    "gulp-util": "^3.0.6",
+    "gulp-util": "^3.0.7",
     "readable-stream": "^2.0.2",
     "rimraf": "^2.4.3",
-    "vinyl-fs": "^2.1.1",
+    "vinyl-fs": "^2.2.1",
     "wrap-promise": "^1.0.1"
   },
   "devDependencies": {
     "@shinnn/eslint-config-node-legacy": "^1.0.0",
-    "eslint": "^1.6.0",
+    "eslint": "^1.7.2",
     "graceful-fs": "^4.1.2",
-    "istanbul": "^0.3.22",
+    "istanbul": "^0.4.0",
     "istanbul-coveralls": "^1.0.3",
     "log-symbols": "^1.0.2",
     "mocha": "^2.3.3",
     "node-uuid": "^1.4.3",
-    "octonode": "^0.7.3",
+    "octonode": "^0.7.4",
     "read-remove-file": "^3.0.0",
     "vinyl": "^1.0.0"
   }
