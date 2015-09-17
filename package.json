@@ -32,8 +32,7 @@
     "pretest": "eslint --config @shinnn/node-legacy --env mocha --rule 'no-underscore-dangle: 0' --rule 'camelcase: 0' index.js test.js lib",
     "test": "mocha test.js --timeout 50000 --full-trace",
     "test-only": "mocha test.js --timeout 50000 --full-trace",
-    "coverage": "istanbul cover _mocha test.js -x=test.js -- --timeout 50000",
-    "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
+    "coverage": "istanbul cover _mocha test.js -x=test.js -- --timeout 50000"
   },
   "dependencies": {
     "gift": "^0.6.1",
@@ -48,7 +47,6 @@
     "eslint": "^1.7.2",
     "graceful-fs": "^4.1.2",
     "istanbul": "^0.4.0",
-    "istanbul-coveralls": "^1.0.3",
     "log-symbols": "^1.0.2",
     "mocha": "^2.3.3",
     "node-uuid": "^1.4.3",

@@ -6,7 +6,12 @@ node_js: stable
 before_script:
   - git config --global user.name "Shinnosuke Watanabe"
   - git config --global user.email "snnskwtnb@gmail.com"
-after_script: npm run-script coveralls
+script:
+  - npm run-script pretest
+  - npm run-script coverage
+after_script:
+  - npm install istanbul-coveralls
+  - node node_modules/.bin/istanbul-coveralls
 env:
   global:
     secure: Fv8nNp9Gwmcr/h8emqdgYLgfO4lV+9FSZFL4Bw+lMbi7kzRsDAsfBdCTbKT+b9P/Q/JnEphX+5mXuo34plCvjwkRWxP/8G+Y89O+VA9GfNOZIUeTBnFo3U4ClhcZdo/Lz1MpCue7gcZit1FQKN9iIJFbLFtcC1ngAGtx76wqnT0=
