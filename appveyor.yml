@@ -6,6 +6,8 @@ environment:
     secure: 4ghR4B22y08Vjex2N9eTuXOaWaK4qSHu+AxEjF/jAQ6GRLXW7Mog1sWxYb6un3C2
 install:
   - ps: Install-Product node 4
+  - npm -g install npm@latest
+  - set PATH=%APPDATA%\npm;%PATH%
   - npm install
 build: off
 before_test:
