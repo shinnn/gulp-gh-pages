@@ -4,8 +4,8 @@ git:
 language: node_js
 node_js: stable
 before_script:
-  - git config --global user.name "Shinnosuke Watanabe"
-  - git config --global user.email "snnskwtnb@gmail.com"
+  - git config --global user.name "John Doe"
+  - git config --global user.email johndoe@example.com
 script:
   - npm run-script pretest
   - npm run-script coverage

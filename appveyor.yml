@@ -5,13 +5,13 @@ environment:
   GH_ACCESS_TOKEN:
     secure: 4ghR4B22y08Vjex2N9eTuXOaWaK4qSHu+AxEjF/jAQ6GRLXW7Mog1sWxYb6un3C2
 install:
-  - ps: Install-Product node 4
+  - ps: Install-Product node 5
   - npm -g install npm@latest
   - set PATH=%APPDATA%\npm;%PATH%
   - npm install
 build: off
 before_test:
-  - git config --global user.name "Shinnosuke Watanabe"
-  - git config --global user.email "snnskwtnb@gmail.com"
+  - git config --global user.name "John Doe"
+  - git config --global user.email johndoe@example.com
 test_script: npm run-script test-only
 cache: node_modules -> package.json
