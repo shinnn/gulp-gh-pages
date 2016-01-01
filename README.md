@@ -97,6 +97,15 @@ Default: `"Update [timestamp]"`
 
 Edit commit message.
 
+#### options.remove
+
+Type: `Boolean`  
+Default: `true`
+
+Allow you to override old files instead of removing and copying.
+`true` for remove and copy. `false` for override.
+Useful when you want to keep old builds.
+
 ## License
 
 Copyright (c) 2014 [Micheal Benedict](https://github.com/rowoot), 2015 [Shinnosuke Watanabe](https://github.com/shinnn)

@@ -16,6 +16,7 @@ var wrapPromise = require('wrap-promise');
  *   - cacheDir: {String} where the git repo will be located. (default to a temporary folder)
  *   - push: {Boolean} to know whether or not the branch should be pushed (default to `true`)
  *   - message: {String} commit message (default to `"Update [timestamp]"`)
+ *   - remove: {Boolean} to know whether or not the old files should be removed (default to `true`)
  *
  * Returns `Stream`.
 **/
@@ -96,13 +97,17 @@ module.exports = function gulpGhPages(options) {
       .then(function(repo) {
         // remove all files
         return wrapPromise(function(resolve, reject) {
-          repo._repo.remove('.', {r: true}, function(err) {
-            if (err) {
-              reject(err);
-              return;
-            }
+          if (options.remove === undefined || options.remove) {
+            repo._repo.remove('.', {r: true}, function(err) {
+              if (err) {
+                reject(err);
+                return;
+              }
+              resolve(repo.status());
+            });
+          } else {
             resolve(repo.status());
-          });
+          }
         });
       })
       .then(function(repo) {
