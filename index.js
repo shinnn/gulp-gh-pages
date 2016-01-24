@@ -66,7 +66,7 @@ module.exports = function gulpGhPages(options) {
           return repo.checkoutBranch(branch);
         }
 
-        if (repo._remoteBranches.indexOf(origin + '/' + branch) > -1) {
+        if (repo._remoteBranches.indexOf('origin/' + branch) > -1) {
           gutil.log(TAG, 'Checkout remote branch `' + branch + '`');
           return repo.checkoutBranch(branch);
         }
@@ -141,7 +141,7 @@ module.exports = function gulpGhPages(options) {
             gutil.log(TAG, 'Pushing to remote.');
             newRepo._repo.git('push', {
               'set-upstream': true
-            }, [origin, newRepo._currentBranch], function(err) {
+            }, ['origin', newRepo._currentBranch], function(err) {
               if (err) {
                 cb(err);
                 return;

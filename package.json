@@ -44,13 +44,12 @@
   },
   "devDependencies": {
     "@shinnn/eslint-config-node-legacy": "^1.0.0",
+    "adm-zip": "^0.4.7",
     "eslint": "^1.10.1",
     "graceful-fs": "^4.1.2",
     "istanbul": "^0.4.1",
-    "log-symbols": "^1.0.2",
     "mocha": "^2.3.4",
     "node-uuid": "^1.4.7",
-    "octonode": "^0.7.4",
     "read-remove-file": "^3.0.0",
     "vinyl": "^1.1.0"
   }

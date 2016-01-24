@@ -31,6 +31,15 @@ gulp.task('deploy', function() {
 });
 ```
 
+To push gh-pages to a remote other than "origin":
+
+```javascript
+gulp.task('deploy', function() {
+  return gulp.src('./dist/**/*')
+    .pipe(ghPages({origin: 'github'}));
+});
+```
+
 Now, you should be able to call your task by doing:
 
 ```she
@@ -53,14 +62,14 @@ Return: `Object` ([stream.Transform](https://nodejs.org/api/stream.html#stream_c
 Type: `String`  
 Default: URL for the remote of the current dir (assumes a git repository)
 
-By default `gulp-gh-pages` assumes the current working directory is a git repository and uses its remote url. If your `gulpfile.js` is not in a git repository, or if you want to push to a different remote url, you can specify it. Ensure you have write access to the repository.
+By default `gulp-gh-pages` assumes the current working directory is a git repository and uses the URL of the remote designated by `origin`. If your `gulpfile.js` is not in a git repository, or if you want to push to a different remote url, you can specify it. Ensure you have write access to the repository.
 
 #### options.origin
 
 Type: `String`  
 Default: `"origin"`
 
-Git remote.
+The Git remote to push the changes to. If `remoteUrl` is given, this is ignored.
 
 #### options.branch
 
