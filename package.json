@@ -34,6 +34,9 @@
     "test-only": "mocha test.js --timeout 50000 --full-trace",
     "coverage": "istanbul cover _mocha test.js -x=test.js -- --timeout 50000"
   },
+  "peerDependencies": {
+    "gulp": "^3.0.0"
+  },
   "dependencies": {
     "gift": "^0.7.0",
     "gulp-util": "^3.0.7",
