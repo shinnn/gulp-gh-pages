@@ -37,6 +37,22 @@ Now, you should be able to call your task by doing:
 gulp deploy
 ```
 
+## CNAME
+
+If you are using a [custom domain name](https://help.github.com/articles/using-a-custom-domain-with-github-pages/) with your GitHub Pages site, you need to add a CNAME file. You could create this file as part of your deploy task using something like [gulp-file](https://www.npmjs.com/package/gulp-file):
+
+```javascript
+var gulp = require('gulp');
+var ghPages = require('gulp-gh-pages');
+var file = require('gulp-file');
+
+gulp.task('deploy', function() {
+  return gulp.src('./dist/**/*')
+    .pipe(file('CNAME', 'www.example.com'))
+    .pipe(ghPages());
+});
+```
+
 ## API
 
 ```javascript
