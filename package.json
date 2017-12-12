@@ -35,23 +35,23 @@
     "coverage": "istanbul cover _mocha test.js -x=test.js -- --timeout 50000"
   },
   "dependencies": {
-    "gift": "^0.7.0",
+    "gift": "^0.10.1",
     "gulp-util": "^3.0.7",
     "readable-stream": "^2.0.4",
     "rimraf": "^2.4.4",
-    "vinyl-fs": "^2.2.1",
+    "vinyl-fs": "^3.0.0",
     "wrap-promise": "^1.0.1"
   },
   "devDependencies": {
-    "@shinnn/eslint-config-node-legacy": "^1.0.0",
-    "eslint": "^1.10.1",
+    "@shinnn/eslint-config-node-legacy": "^3.0.0",
+    "eslint": "^4.13.1",
     "graceful-fs": "^4.1.2",
     "istanbul": "^0.4.1",
-    "log-symbols": "^1.0.2",
-    "mocha": "^2.3.4",
+    "log-symbols": "^2.1.0",
+    "mocha": "^4.0.1",
     "node-uuid": "^1.4.7",
-    "octonode": "^0.7.4",
-    "read-remove-file": "^3.0.0",
-    "vinyl": "^1.1.0"
+    "octonode": "^0.9.1",
+    "read-remove-file": "^5.0.0",
+    "vinyl": "^2.1.0"
   }
 }
