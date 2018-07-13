@@ -1,6 +1,6 @@
 {
 	"name": "gulp-gh-pages",
-	"version": "0.6.0-0",
+	"version": "0.6.0-1",
 	"description": "gulp plugin to publish contents to Github pages",
 	"repository": "shinnn/gulp-gh-pages",
 	"license": "MIT",
