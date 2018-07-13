@@ -1,19 +1,17 @@
 # gulp-gh-pages
 
-[![NPM version](http://img.shields.io/npm/v/gulp-gh-pages.svg)](https://www.npmjs.com/package/gulp-gh-pages)
+[![npm version](https://img.shields.io/npm/v/gulp-gh-pages.svg)](https://www.npmjs.com/package/gulp-gh-pages)
 [![Build Status](https://travis-ci.org/shinnn/gulp-gh-pages.svg?branch=master)](https://travis-ci.org/shinnn/gulp-gh-pages)
 [![Build status](https://ci.appveyor.com/api/projects/status/iskj8sml9luhkm21?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/gulp-gh-pages)
-[![Coverage Status](https://img.shields.io/coveralls/shinnn/gulp-gh-pages.svg)](https://coveralls.io/r/shinnn/gulp-gh-pages)
-[![Dependency Status](https://img.shields.io/david/shinnn/gulp-gh-pages.svg?label=deps)](https://david-dm.org/shinnn/gulp-gh-pages)
-[![devDependency Status](https://img.shields.io/david/dev/shinnn/gulp-gh-pages.svg?label=devDeps)](https://david-dm.org/shinnn/gulp-gh-pages#info=devDependencies)
+[![Coverage Status](https://img.shields.io/coveralls/shinnn/gulp-gh-pages.svg)](https://coveralls.io/github/shinnn/gulp-gh-pages)
 
 [gulp](http://gulpjs.com/) plugin to publish contents to [Github pages](https://pages.github.com/)
 
 ## Installation
 
-[Use npm](https://docs.npmjs.com/cli/install).
+[Use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/getting-started/what-is-npm).
 
-```sh
+```
 npm install --save-dev gulp-gh-pages
 ```
 
@@ -22,70 +20,67 @@ npm install --save-dev gulp-gh-pages
 Define a `deploy` task in your `gulpfile.js` (as below) which can be used to push to `gh-pages` going forward.
 
 ```javascript
-var gulp = require('gulp');
-var ghPages = require('gulp-gh-pages');
+const gulp = require('gulp');
+const ghPages = require('gulp-gh-pages');
 
-gulp.task('deploy', function() {
-  return gulp.src('./dist/**/*')
-    .pipe(ghPages());
-});
+gulp.task('deploy', () => gulp.src('./dist/**/*').pipe(ghPages()));
 ```
 
 Now, you should be able to call your task by doing:
 
-```she
+```
 gulp deploy
 ```
 
 ## API
 
 ```javascript
-var ghPages = require('gulp-gh-pages');
+const ghPages = require('gulp-gh-pages');
 ```
 
 ### ghPages([*options*])
 
 *options*: `Object`  
-Return: `Object` ([stream.Transform](https://nodejs.org/api/stream.html#stream_class_stream_transform_1))
+Return: [`stream.Transform`](https://nodejs.org/api/stream.html#stream_class_stream_transform)
 
 #### options.remoteUrl
 
-Type: `String`  
+Type: `string`  
 Default: URL for the remote of the current dir (assumes a git repository)
 
 By default `gulp-gh-pages` assumes the current working directory is a git repository and uses its remote url. If your `gulpfile.js` is not in a git repository, or if you want to push to a different remote url, you can specify it. Ensure you have write access to the repository.
 
 #### options.origin
 
-Type: `String`  
+Type: `string`  
 Default: `"origin"`
 
 Git remote.
 
 #### options.branch
 
-Type: `String`  
+Type: `string`  
 Default: `"gh-pages"`
 
 The branch where deploy will by done. Change to "master" for `username.github.io` projects.
 
 #### options.cacheDir
 
-Type: `String`  
+Type: `string`  
 Default: `.publish`
 
 Set the directory path to keep a cache of the repository. If it doesn't exist, gulp-gh-pages automatically create it.
 
 #### options.push
 
-Type: `Boolean`  
+Type: `boolean`  
 Default: `true`
 
 Allow you to make a build on the defined branch without pushing it to master. Useful for dry  run.
 
 #### options.force
 
-Type: `Boolean`  
+Type: `boolean`  
 Default: `false`
 
 Force adding files to the `gh-pages` branch, even if they are ignored by `.gitignore` or `.gitignore_global`.
@@ -99,6 +94,4 @@ Edit commit message.
 
 ## License
 
-Copyright (c) 2014 [Micheal Benedict](https://github.com/rowoot), 2015 [Shinnosuke Watanabe](https://github.com/shinnn)
-
-Licensed under [the MIT License](./LICENSE).
+[MIT License](./LICENSE) © 2014 [Micheal Benedict](https://github.com/rowoot), 2015 - 2018 [Shinnosuke Watanabe](https://github.com/shinnn)
