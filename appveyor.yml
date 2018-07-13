@@ -1,17 +1,15 @@
+image: Visual Studio 2017
+platform: x64
 shallow_clone: true
-version: '{build}'
 skip_tags: true
 environment:
   GH_ACCESS_TOKEN:
-    secure: 4ghR4B22y08Vjex2N9eTuXOaWaK4qSHu+AxEjF/jAQ6GRLXW7Mog1sWxYb6un3C2
+    secure: 8LHqSTU/5Tp7nvthuF5w7BH5DJ4Rvl7TMYq22zPbKe9HuvxbcXMJelMzIbWlrHHV
 install:
-  - ps: Install-Product node 5
-  - npm -g install npm@latest
-  - set PATH=%APPDATA%\npm;%PATH%
-  - npm install
+  - ps: Install-Product node Stable x64
+  - npm ci
 build: off
 before_test:
   - git config --global user.name "John Doe"
   - git config --global user.email johndoe@example.com
 test_script: npm run-script test-only
-cache: node_modules -> package.json
