@@ -1,17 +1,9 @@
-sudo: false
-git:
-  depth: 1
 language: node_js
-node_js: stable
+node_js: node
 before_script:
   - git config --global user.name "John Doe"
-  - git config --global user.email johndoe@example.com
-script:
-  - npm run-script pretest
-  - npm run-script coverage
-after_script:
-  - npm install istanbul-coveralls
-  - node node_modules/.bin/istanbul-coveralls
+  - git config --global user.email johndoe@example.org
+after_script: node_modules/.bin/nyc report --reporter=text-lcov | npx coveralls
 env:
   global:
-    secure: Fv8nNp9Gwmcr/h8emqdgYLgfO4lV+9FSZFL4Bw+lMbi7kzRsDAsfBdCTbKT+b9P/Q/JnEphX+5mXuo34plCvjwkRWxP/8G+Y89O+VA9GfNOZIUeTBnFo3U4ClhcZdo/Lz1MpCue7gcZit1FQKN9iIJFbLFtcC1ngAGtx76wqnT0=
+    secure: AyV0RreeMm/z1BIjjlTw3I7f/sbNblMfEoTabC41FTDK3i7GvJYsgqS9N38ACNKmB7i89mUr+GzKsXY3FoD7k6DGlSbjM9jYi6O2nEwa3/Q3RUVAXFJLQhr/IxlAsAv0Cp4jY6g7cA6qbVv0vbTUfnnC+0xoFl61EeEE3uv8uzE=
