@@ -2,8 +2,9 @@
 
 const Transform = require('stream').Transform;
 
+const fancyLog = require('fancy-log');
 const git = require('./lib/git');
-const gutil = require('gulp-util');
+const PluginError = require('plugin-error');
 const vinylFs = require('vinyl-fs');
 const wrapPromise = require('wrap-promise');
 
@@ -43,7 +44,7 @@ module.exports = function gulpGhPages(options) {
 			}
 
 			if (file.isStream()) {
-				cb(new gutil.PluginError('gulp-gh-pages', 'Stream content is not supported'));
+				cb(new PluginError('gulp-gh-pages', 'Stream content is not supported'));
 				return;
 			}
 
@@ -52,7 +53,7 @@ module.exports = function gulpGhPages(options) {
 		},
 		flush: function publish(cb) {
 			if (files.length === 0) {
-				gutil.log(TAG, 'No files in the stream.');
+				fancyLog(TAG, 'No files in the stream.');
 				cb();
 				return;
 			}
@@ -61,18 +62,18 @@ module.exports = function gulpGhPages(options) {
 
 			git.prepareRepo(options.remoteUrl, origin, options.cacheDir || '.publish')
 			.then(repo => {
-				gutil.log(TAG, 'Cloning repo');
+				fancyLog(TAG, 'Cloning repo');
 				if (repo._localBranches.indexOf(branch) > -1) {
-					gutil.log(TAG, `Checkout branch \`${branch}\``);
+					fancyLog(TAG, `Checkout branch \`${branch}\``);
 					return repo.checkoutBranch(branch);
 				}
 
 				if (repo._remoteBranches.indexOf(`${origin}/${branch}`) > -1) {
-					gutil.log(TAG, `Checkout remote branch \`${branch}\``);
+					fancyLog(TAG, `Checkout remote branch \`${branch}\``);
 					return repo.checkoutBranch(branch);
 				}
 
-				gutil.log(TAG, `Create branch \`${branch}\` and checkout`);
+				fancyLog(TAG, `Create branch \`${branch}\` and checkout`);
 				newBranchCreated = true;
 				return repo.createAndCheckoutBranch(branch);
 			})
@@ -83,7 +84,7 @@ module.exports = function gulpGhPages(options) {
 				}
 
 				// updating to avoid having local cache not up to date
-				gutil.log(TAG, 'Updating repository');
+				fancyLog(TAG, 'Updating repository');
 				repo._repo.git('pull', err => {
 					if (err) {
 						reject(err);
@@ -102,7 +103,7 @@ module.exports = function gulpGhPages(options) {
 				});
 			}))
 			.then(repo => {
-				gutil.log(TAG, 'Copying files to repository');
+				fancyLog(TAG, 'Copying files to repository');
 
 				return wrapPromise((resolve, reject) => {
 					const destStream = vinylFs.dest(repo._repo.path)
@@ -123,16 +124,16 @@ module.exports = function gulpGhPages(options) {
 			.then(repo => {
 				const filesToBeCommitted = Object.keys(repo._staged).length;
 				if (filesToBeCommitted === 0) {
-					gutil.log(TAG, 'No files have changed.');
+					fancyLog(TAG, 'No files have changed.');
 					cb();
 					return;
 				}
 
-				gutil.log(TAG, `Adding ${filesToBeCommitted} files.`);
-				gutil.log(TAG, `Committing "${message}"`);
+				fancyLog(TAG, `Adding ${filesToBeCommitted} files.`);
+				fancyLog(TAG, `Committing "${message}"`);
 				repo.commit(message).then(newRepo => {
 					if (options.push === undefined || options.push) {
-						gutil.log(TAG, 'Pushing to remote.');
+						fancyLog(TAG, 'Pushing to remote.');
 						newRepo._repo.git('push', {
 							'set-upstream': true
 						}, [origin, newRepo._currentBranch], err => {
@@ -149,7 +150,7 @@ module.exports = function gulpGhPages(options) {
 			})
 			.catch(err => {
 				setImmediate(() => {
-					cb(new gutil.PluginError('gulp-gh-pages', err));
+					cb(new PluginError('gulp-gh-pages', err));
 				});
 			});
 		}
