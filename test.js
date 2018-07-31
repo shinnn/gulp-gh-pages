@@ -2,20 +2,19 @@
 
 const assert = require('assert').strict;
 const {PassThrough} = require('stream');
-const path = require('path');
-const {readFile} = require('fs');
+const {join} = require('path');
+const {randomBytes} = require('crypto');
+const {readFile} = require('fs').promises;
 
 const File = require('vinyl');
 const ghPages = require('.');
-const git = require('./lib/git');
+const git = require('./lib.js');
 const github = require('octonode');
-const logSymbols = require('log-symbols');
 const readRemoveFile = require('read-remove-file');
 const rimraf = require('rimraf');
-const uuid = require('uuid');
 
 const tmpDir = '.publish';
-const tmpStr = uuid.v4();
+const tmpStr = randomBytes(32).toString('hex');
 const tmpFile = new File({
 	path: tmpStr,
 	contents: Buffer.from(tmpStr)
@@ -37,65 +36,32 @@ let remoteUrl;
 let accessToken = process.env.GH_ACCESS_TOKEN;
 let client;
 
-before(done => {
+before(async () => {
 	if (accessToken) {
-		console.log(`${logSymbols.success
-		} Set Github Access token from the environment variable`);
 		client = github.client(accessToken);
 		remoteUrl = `https://${accessToken}@github.com/${tmpRepoName}.git`;
-		done();
-	} else {
-		const accessTokenFile = 'gh-access-token.txt';
 
-		readFile(accessTokenFile, 'utf8', (err, text) => {
-			if (err || !text) {
-				console.error(`${logSymbols.warning
-				} Create a plain text file "${
-					accessTokenFile
-				}" which contains your Github access token.`);
-				accessToken = '';
-			} else {
-				accessToken = text.trim();
-				console.log(`${logSymbols.success
-				} Set Github Access token from ${accessTokenFile}`);
-			}
-
-			client = github.client(accessToken);
-			remoteUrl = `https://${accessToken}@github.com/${tmpRepoName}.git`;
-			done();
-		});
+		return;
 	}
-});
 
-describe('git operations on a repo', () => {
-	before(done => rimraf(tmpDir, done));
+	const accessTokenFile = 'gh-access-token.txt';
 
-	it('should throw an error when checking out a non existent branch', done => {
-		git.prepareRepo(`https://github.com/${tmpRepoName}.git`, 'origin', '.publish')
-		.then(repo => repo.checkoutBranch('non-existent-branch'))
-		.then(() => {
-			done(new Error('Expected an error.'));
-		}, err => {
-			const expectedMsg = 'error: pathspec \'' +
-                        'non-existent-branch' +
-                        '\' did not match any file(s) known to git.\n';
-			assert.notEqual(err.message.indexOf(expectedMsg), -1);
-			done();
-		});
-	});
+	try {
+		accessToken = (await readFile(accessTokenFile, 'utf8')).trim();
+	} catch {
+		throw new Error(`Create a plain text file "${accessTokenFile}" which contains your Github access token.`);
+	}
+
+	client = github.client(accessToken);
+	remoteUrl = `https://${accessToken}@github.com/${tmpRepoName}.git`;
 });
 
 describe('git operations on special repositories', () => {
-	before(done => {
-		rimraf(tmpDir, done);
-	});
+	before(done => rimraf(tmpDir, done));
 
-	it('should be initialized on the default branch', done => {
-		git.prepareRepo('https://github.com/LeaVerou/csss.git', null, '.publish')
-		.then(repo => {
-			assert.equal(repo._currentBranch, 'gh-pages');
-			done();
-		});
+	it('should be initialized on the default branch', async () => {
+		const repo = await git.prepareRepo('https://github.com/LeaVerou/csss.git', null, '.publish');
+		assert.equal(repo._currentBranch, 'gh-pages');
 	});
 });
 
@@ -143,12 +109,9 @@ describe('gulp-gh-pages', () => {
 		})
 		.on('error', done)
 		.on('data', file => assert(file.isBuffer()))
-		.on('end', () => {
-			readFile(path.join(tmpDir, tmpStr), (err, buf) => {
-				assert.strictEqual(err, null);
-				assert.equal(String(buf), tmpStr);
-				done();
-			});
+		.on('end', async () => {
+			assert.equal(await readFile(join(tmpDir, tmpStr), 'utf8'), tmpStr);
+			done();
 		});
 
 		for (const file of files) {
@@ -230,7 +193,7 @@ describe('gulp-gh-pages', () => {
 		})
 		.on('end', async () => {
 			assert.equal(
-				await readRemoveFile(path.join('__cache__', tmpStr), 'utf8'),
+				await readRemoveFile(join(__dirname, '__cache__', tmpStr), 'utf8'),
 				tmpStr
 			);
 
@@ -242,7 +205,7 @@ describe('gulp-gh-pages', () => {
 	it('should emit an error when it fails to create a cache directory', done => {
 		ghPages({
 			remoteUrl,
-			cacheDir: path.join(__filename, 'dir')
+			cacheDir: join(__filename, 'dir')
 		})
 		.on('error', err => {
 			assert(err.code);
@@ -288,7 +251,7 @@ describe('gulp-gh-pages', () => {
 		ghPages()
 		.on('error', err => {
 			assert(err);
-			process.chdir(path.resolve(__dirname, '..'));
+			process.chdir(join(__dirname, '..'));
 			done();
 		})
 		.on('end', () => done(new Error('Expected an error.')))

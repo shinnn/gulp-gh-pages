@@ -1,12 +1,12 @@
 'use strict';
 
-const Transform = require('stream').Transform;
+const {promisify} = require('util');
+const {finished, Transform} = require('stream');
 
 const fancyLog = require('fancy-log');
-const git = require('./lib/git');
+const git = require('./lib.js');
 const PluginError = require('plugin-error');
 const vinylFs = require('vinyl-fs');
-const wrapPromise = require('wrap-promise');
 
 /*
  * Public: Push to gh-pages branch for github
@@ -22,22 +22,17 @@ const wrapPromise = require('wrap-promise');
  * Returns `Stream`.
 **/
 module.exports = function gulpGhPages(options) {
-	options = options || {};
+	options = {...options};
 	const origin = options.origin || 'origin';
 	const branch = options.branch || 'gh-pages';
 	const message = options.message || `Update ${new Date().toISOString()}`;
 
 	const files = [];
-	let TAG;
-	if (branch !== 'gh-pages') {
-		TAG = `[gh-pages (${branch})]`;
-	} else {
-		TAG = '[gh-pages]';
-	}
+	const TAG = branch === 'gh-pages' ? '[gh-pages]' : `[gh-pages (${branch})]`;
 
 	return new Transform({
 		objectMode: true,
-		transform: function collectFiles(file, enc, cb) {
+		transform(file, enc, cb) {
 			if (file.isNull()) {
 				cb(null, file);
 				return;
@@ -51,78 +46,47 @@ module.exports = function gulpGhPages(options) {
 			files.push(file);
 			cb(null, file);
 		},
-		flush: function publish(cb) {
+		async flush(cb) {
 			if (files.length === 0) {
 				fancyLog(TAG, 'No files in the stream.');
 				cb();
 				return;
 			}
 
-			let newBranchCreated = false;
-
-			git.prepareRepo(options.remoteUrl, origin, options.cacheDir || '.publish')
-			.then(repo => {
+			try {
+				const repo = await git.prepareRepo(options.remoteUrl, origin, options.cacheDir || '.publish');
 				fancyLog(TAG, 'Cloning repo');
-				if (repo._localBranches.indexOf(branch) > -1) {
+
+				if (repo._localBranches.includes(branch)) {
 					fancyLog(TAG, `Checkout branch \`${branch}\``);
-					return repo.checkoutBranch(branch);
+					await repo.checkoutBranch(branch);
 				}
 
-				if (repo._remoteBranches.indexOf(`${origin}/${branch}`) > -1) {
+				if (repo._remoteBranches.includes(`${origin}/${branch}`)) {
 					fancyLog(TAG, `Checkout remote branch \`${branch}\``);
-					return repo.checkoutBranch(branch);
+					await repo.checkoutBranch(branch);
+					fancyLog(TAG, 'Updating repository');
+					// updating to avoid having local cache not up to date
+					await promisify(repo._repo.git.bind(repo._repo))('pull');
+				} else {
+					fancyLog(TAG, `Create branch \`${branch}\` and checkout`);
+					await repo.createAndCheckoutBranch(branch);
 				}
 
-				fancyLog(TAG, `Create branch \`${branch}\` and checkout`);
-				newBranchCreated = true;
-				return repo.createAndCheckoutBranch(branch);
-			})
-			.then(repo => wrapPromise((resolve, reject) => {
-				if (newBranchCreated) {
-					resolve(repo);
-					return;
-				}
-
-				// updating to avoid having local cache not up to date
-				fancyLog(TAG, 'Updating repository');
-				repo._repo.git('pull', err => {
-					if (err) {
-						reject(err);
-						return;
-					}
-					resolve(repo);
-				});
-			}))
-			.then(repo => wrapPromise((resolve, reject) => {
-				repo._repo.remove('.', {r: true}, err => {
-					if (err) {
-						reject(err);
-						return;
-					}
-					resolve(repo.status());
-				});
-			}))
-			.then(repo => {
+				await promisify(repo._repo.remove.bind(repo._repo))('.', {r: true});
 				fancyLog(TAG, 'Copying files to repository');
 
-				return wrapPromise((resolve, reject) => {
-					const destStream = vinylFs.dest(repo._repo.path)
-					.on('error', reject)
-					.on('end', () => {
-						resolve(repo);
-					})
-					.resume();
+				const destStream = vinylFs.dest(repo._repo.path);
 
-					files.forEach(file => {
-						destStream.write(file);
-					});
+				for (const file of files) {
+					destStream.write(file);
+				}
 
-					destStream.end();
-				});
-			})
-			.then(repo => repo.addFiles('.', {force: options.force || false}))
-			.then(repo => {
+				setImmediate(() => destStream.end());
+				await promisify(finished)(destStream);
+				await repo.addFiles('.', {force: options.force || false});
 				const filesToBeCommitted = Object.keys(repo._staged).length;
+
 				if (filesToBeCommitted === 0) {
 					fancyLog(TAG, 'No files have changed.');
 					cb();
@@ -131,28 +95,23 @@ module.exports = function gulpGhPages(options) {
 
 				fancyLog(TAG, `Adding ${filesToBeCommitted} files.`);
 				fancyLog(TAG, `Committing "${message}"`);
-				repo.commit(message).then(newRepo => {
-					if (options.push === undefined || options.push) {
-						fancyLog(TAG, 'Pushing to remote.');
-						newRepo._repo.git('push', {
-							'set-upstream': true
-						}, [origin, newRepo._currentBranch], err => {
-							if (err) {
-								cb(err);
-								return;
-							}
-							cb();
-						});
-						return;
-					}
+
+				const nrepo = await repo.commit(message);
+
+				if (!(options.push === undefined || options.push)) {
 					cb();
-				}, cb);
-			})
-			.catch(err => {
-				setImmediate(() => {
-					cb(new PluginError('gulp-gh-pages', err));
-				});
-			});
+					return;
+				}
+
+				fancyLog(TAG, 'Pushing to remote.');
+				await promisify(nrepo._repo.git.bind(nrepo._repo))('push', {
+					'set-upstream': true
+				}, [origin, nrepo._currentBranch]);
+
+				cb();
+			} catch (err) {
+				cb(err);
+			}
 		}
 	});
 };

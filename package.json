@@ -26,10 +26,10 @@
 	],
 	"files": [
 		"index.js",
-		"lib"
+		"lib.js"
 	],
 	"scripts": {
-		"pretest": "eslint index.js test.js lib",
+		"pretest": "eslint .",
 		"test": "nyc --reporter=html --reporter=text mocha test.js --timeout 50000 --full-trace"
 	},
 	"dependencies": {
@@ -37,18 +37,15 @@
 		"gift": "^0.10.2",
 		"plugin-error": "^1.0.1",
 		"rimraf": "^2.6.2",
-		"vinyl-fs": "^3.0.3",
-		"wrap-promise": "^1.0.1"
+		"vinyl-fs": "^3.0.3"
 	},
 	"devDependencies": {
 		"@shinnn/eslint-config-node": "^6.0.0",
-		"eslint": "^5.1.0",
-		"log-symbols": "^2.2.0",
+		"eslint": "^5.2.0",
 		"mocha": "^5.2.0",
 		"nyc": "^12.0.2",
-		"octonode": "^0.9.2",
+		"octonode": "^0.9.3",
 		"read-remove-file": "^5.0.1",
-		"uuid": "^3.2.1",
 		"vinyl": "^2.2.0"
 	},
 	"eslintConfig": {
