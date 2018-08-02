@@ -5,6 +5,8 @@ const {finished, Transform} = require('stream');
 
 const fancyLog = require('fancy-log');
 const git = require('./lib.js');
+const inspectWithKind = require('inspect-with-kind');
+const {isVinyl} = require('vinyl');
 const PluginError = require('plugin-error');
 const vinylFs = require('vinyl-fs');
 
@@ -33,6 +35,18 @@ module.exports = function gulpGhPages(options) {
 	return new Transform({
 		objectMode: true,
 		transform(file, enc, cb) {
+			if (!isVinyl(file)) {
+				if (file !== null && typeof file === 'object' && typeof file.isNull === 'function') {
+					cb(new PluginError('gulp-gh-pages', 'gulp-gh-pages doesn\'t support gulp <= v3.x. Update your project to use gulp >= v4.0.0.'));
+					return;
+				}
+
+				cb(new PluginError('gulp-gh-pages', `Expected a stream created by gulp-gh-pages to receive Vinyl objects https://github.com/gulpjs/vinyl, but got ${
+					inspectWithKind(file)
+				}.`));
+				return;
+			}
+
 			if (file.isNull()) {
 				cb(null, file);
 				return;

@@ -12,7 +12,7 @@
 [Use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/getting-started/what-is-npm).
 
 ```
-npm install --save-dev gulp-gh-pages
+npm install --save-dev gulp@next gulp-gh-pages
 ```
 
 ## Usage
@@ -20,10 +20,10 @@ npm install --save-dev gulp-gh-pages
 Define a `deploy` task in your `gulpfile.js` (as below) which can be used to push to `gh-pages` going forward.
 
 ```javascript
-const gulp = require('gulp');
+const {src, task}= require('gulp');
 const ghPages = require('gulp-gh-pages');
 
-gulp.task('deploy', () => gulp.src('./dist/**/*').pipe(ghPages()));
+task('deploy', () => src('./dist/**/*').pipe(ghPages()));
 ```
 
 Now, you should be able to call your task by doing:
@@ -87,7 +87,7 @@ Force adding files to the `gh-pages` branch, even if they are ignored by `.gitig
 
 #### options.message
 
-Type: `String`  
+Type: `string`  
 Default: `"Update [timestamp]"`
 
 Edit commit message.

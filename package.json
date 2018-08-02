@@ -35,18 +35,20 @@
 	"dependencies": {
 		"fancy-log": "^1.3.2",
 		"gift": "^0.10.2",
+		"inspect-with-kind": "^1.0.4",
 		"plugin-error": "^1.0.1",
 		"rimraf": "^2.6.2",
+		"vinyl": "^2.2.0",
 		"vinyl-fs": "^3.0.3"
 	},
 	"devDependencies": {
 		"@shinnn/eslint-config-node": "^6.0.0",
 		"eslint": "^5.2.0",
+		"lodash": "^4.17.10",
 		"mocha": "^5.2.0",
 		"nyc": "^12.0.2",
 		"octonode": "^0.9.3",
-		"read-remove-file": "^5.0.1",
-		"vinyl": "^2.2.0"
+		"read-remove-file": "^5.0.1"
 	},
 	"eslintConfig": {
 		"extends": "@shinnn/node",

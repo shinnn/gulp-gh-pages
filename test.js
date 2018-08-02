@@ -10,6 +10,7 @@ const File = require('vinyl');
 const ghPages = require('.');
 const git = require('./lib.js');
 const github = require('octonode');
+const noop = require('lodash/noop');
 const readRemoveFile = require('read-remove-file');
 const rimraf = require('rimraf');
 
@@ -80,6 +81,32 @@ describe('gulp-gh-pages', () => {
 				sha: '8d6c241faa1246137a57b9f3cefcafbf30f14966'
 			}, done);
 		});
+	});
+
+	it('should emit an error when it takes a non-Vinyl value', done => {
+		ghPages()
+		.on('error', ({message}) => {
+			assert.equal(
+				message,
+				'Expected a stream created by gulp-gh-pages to receive Vinyl objects https://github.com/gulpjs/vinyl, but got <Buffer 3f>.'
+			);
+
+			done();
+		})
+		.end(Buffer.from('?'));
+	});
+
+	it('should emit an error when it takes an older version of Vinyl object', done => {
+		ghPages()
+		.on('error', ({message}) => {
+			assert.equal(
+				message,
+				'gulp-gh-pages doesn\'t support gulp <= v3.x. Update your project to use gulp >= v4.0.0.'
+			);
+
+			done();
+		})
+		.end({isNull: noop});
 	});
 
 	it('should ignore empty vinyl file objects', done => {
