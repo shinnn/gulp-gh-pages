@@ -22,12 +22,6 @@ async function listRemoteBranches(repo) {
 	});
 }
 
-async function getCommits(repo, branchName) {
-	return (await promisify(repo.commits.bind(repo))(branchName)).map(({id, message, committed_date}) => {
-		return {id, message, committed_date};
-	});
-}
-
 class Git {
 	constructor(repo, initialBranch) {
 		this._repo = repo;
@@ -35,7 +29,6 @@ class Git {
 		this._localBranches = [];
 		this._remoteBranches = [];
 		this._currentBranch = initialBranch;
-		this._commits = [];
 	}
 
 	/*
@@ -46,8 +39,7 @@ class Git {
 		const repo = await promisify(this._repo.status.bind(this._repo))();
 		this._repo = repo.repo;
 		this._staged = repo.files;
-		[this._commits, this._remoteBranches, this._localBranches] = await Promise.all([
-			getCommits(this._repo, this._currentBranch),
+		[this._remoteBranches, this._localBranches] = await Promise.all([
 			listRemoteBranches(this._repo),
 			listLocalBranches(this._repo)
 		]);
@@ -98,7 +90,9 @@ async function getRemoteUrl(repo, remote) {
 async function prepareRepo(remoteUrl, origin, dir) {
 	// assume that if there is a .git folder get its remoteUrl
 	// and check if it mathces the one we want to use.
-	remoteUrl = remoteUrl || await getRemoteUrl(git(process.cwd()), origin);
+	if (!remoteUrl) {
+		remoteUrl = await getRemoteUrl(git(process.cwd()), origin);
+	}
 
 	async function initRepo(repo) {
 		const head = await promisify(repo.branch.bind(repo))();

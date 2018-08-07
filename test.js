@@ -254,8 +254,8 @@ describe('gulp-gh-pages', () => {
 
 	it('should emit an error when the user has no permission to push the repo', done => {
 		ghPages({remoteUrl: `https://${accessToken}@github.com/z/dotfiles.git`})
-		.on('error', err => {
-			assert(/Permission to/.test(err.message));
+		.on('error', ({message}) => {
+			assert(message.includes('Permission to'));
 			done();
 		})
 		.on('end', () => done(new Error('Expected an error.')))
@@ -264,8 +264,8 @@ describe('gulp-gh-pages', () => {
 
 	it('should emit an error when the remote URL is not a git repository\'s URL', done => {
 		ghPages({remoteUrl: 'https://example.org/'})
-		.on('error', err => {
-			assert(/ENOENT/.test(err.message));
+		.on('error', ({message}) => {
+			assert(message.includes('ENOENT'));
 			done();
 		})
 		.on('end', () => done(new Error('Expected an error.')))
