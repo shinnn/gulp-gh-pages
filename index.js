@@ -87,7 +87,10 @@ module.exports = function gulpGhPages(options) {
 					await repo.createAndCheckoutBranch(branch);
 				}
 
-				await promisify(repo._repo.remove.bind(repo._repo))('.', {r: true});
+				await promisify(repo._repo.remove.bind(repo._repo))('.', {
+					r: true,
+					'ignore-unmatch': true
+				});
 				fancyLog(TAG, 'Copying files to repository');
 
 				const destStream = vinylFs.dest(repo._repo.path);
