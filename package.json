@@ -52,13 +52,8 @@
 	},
 	"eslintConfig": {
 		"extends": "@shinnn/node",
-		"env": {
-			"mocha": true
-		},
 		"rules": {
-			"camelcase": "off",
-			"no-underscore-dangle": "off",
-			"promise/prefer-await-to-then": "off"
+			"no-underscore-dangle": "off"
 		}
 	}
 }
