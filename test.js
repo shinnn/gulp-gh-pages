@@ -61,7 +61,7 @@ describe('git operations on special repositories', () => {
 	before(done => rimraf(tmpDir, done));
 
 	it('should be initialized on the default branch', async () => {
-		const repo = await git.prepareRepo('https://github.com/LeaVerou/csss.git', null, '.publish');
+		const repo = await git.prepareRepo('https://github.com/LeaVerou/csss.git', '.publish');
 		assert.equal(repo._currentBranch, 'gh-pages');
 	});
 });

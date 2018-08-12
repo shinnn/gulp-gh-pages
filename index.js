@@ -15,7 +15,6 @@ const vinylFs = require('vinyl-fs');
  *
  * options - {Object} that contains all the options of the plugin
  *   - remoteUrl: The {String} remote url (github repository) of the project,
- *   - origin: The {String} origin of the git repository (default to `"origin"`),
  *   - branch: The {String} branch where deploy will by done (default to `"gh-pages"`),
  *   - cacheDir: {String} where the git repo will be located. (default to a temporary folder)
  *   - push: {Boolean} to know whether or not the branch should be pushed (default to `true`)
@@ -25,7 +24,6 @@ const vinylFs = require('vinyl-fs');
 **/
 module.exports = function gulpGhPages(options) {
 	options = {...options};
-	const origin = options.origin || 'origin';
 	const branch = options.branch || 'gh-pages';
 	const message = options.message || `Update ${new Date().toISOString()}`;
 
@@ -68,7 +66,7 @@ module.exports = function gulpGhPages(options) {
 			}
 
 			try {
-				const repo = await git.prepareRepo(options.remoteUrl, origin, options.cacheDir || '.publish');
+				const repo = await git.prepareRepo(options.remoteUrl, options.cacheDir || '.publish');
 				fancyLog(TAG, 'Cloning repo');
 
 				if (repo._localBranches.includes(branch)) {
@@ -76,7 +74,7 @@ module.exports = function gulpGhPages(options) {
 					await repo.checkoutBranch(branch);
 				}
 
-				if (repo._remoteBranches.includes(`${origin}/${branch}`)) {
+				if (repo._remoteBranches.includes(`origin/${branch}`)) {
 					fancyLog(TAG, `Checkout remote branch \`${branch}\``);
 					await repo.checkoutBranch(branch);
 					fancyLog(TAG, 'Updating repository');
@@ -123,7 +121,7 @@ module.exports = function gulpGhPages(options) {
 				fancyLog(TAG, 'Pushing to remote.');
 				await promisify(nrepo._repo.git.bind(nrepo._repo))('push', {
 					'set-upstream': true
-				}, [origin, nrepo._currentBranch]);
+				}, ['origin', nrepo._currentBranch]);
 
 				cb();
 			} catch (err) {

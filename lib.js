@@ -76,22 +76,19 @@ class Git {
 	}
 }
 
-/*
- * Gets the URL for the specified remote of a repo
- */
-async function getRemoteUrl(repo, remote) {
-	return (await promisify(repo.config.bind(repo))()).items[`remote.${remote}.url`];
+async function getRemoteOriginUrl(repo) {
+	return (await promisify(repo.config.bind(repo))()).items['remote.origin.url'];
 }
 
 /*
  * Clone repo
  * Returns repo object
 **/
-async function prepareRepo(remoteUrl, origin, dir) {
+async function prepareRepo(remoteUrl, dir) {
 	// assume that if there is a .git folder get its remoteUrl
 	// and check if it mathces the one we want to use.
 	if (!remoteUrl) {
-		remoteUrl = await getRemoteUrl(git(process.cwd()), origin);
+		remoteUrl = await getRemoteOriginUrl(git(process.cwd()));
 	}
 
 	async function initRepo(repo) {
@@ -105,7 +102,7 @@ async function prepareRepo(remoteUrl, origin, dir) {
 	}
 
 	try {
-		const cwdRemoteUrl = await getRemoteUrl(git(dir), origin);
+		const cwdRemoteUrl = await getRemoteOriginUrl(git(dir));
 
 		if (remoteUrl === cwdRemoteUrl) {
 			return initRepo(git(dir));
@@ -118,6 +115,5 @@ async function prepareRepo(remoteUrl, origin, dir) {
 }
 
 Git.prepareRepo = prepareRepo;
-Git.getRemoteUrl = getRemoteUrl;
 
 module.exports = Git;

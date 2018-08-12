@@ -48,14 +48,7 @@ Return: [`stream.Transform`](https://nodejs.org/api/stream.html#stream_class_str
 Type: `string`  
 Default: URL for the remote of the current dir (assumes a git repository)
 
-By default `gulp-gh-pages` assumes the current working directory is a git repository and uses its remote url. If your `gulpfile.js` is not in a git repository, or if you want to push to a different remote url, you can specify it. Ensure you have write access to the repository.
-
-#### options.origin
-
-Type: `string`  
-Default: `"origin"`
-
-Git remote.
+By default `gulp-gh-pages` assumes the current working directory is a git repository and uses the URL of the remote designated by `origin`. If your `gulpfile.js` is not in a git repository, or if you want to push to a different remote url, you can specify it. Ensure you have write access to the repository.
 
 #### options.branch
 
