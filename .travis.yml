@@ -10,4 +10,5 @@ before_script:
   - git config --global user.email johndoe@example.org
 matrix:
   include:
-  - after_script: node_modules/.bin/nyc report | npx coveralls
+  - dist: xenial
+    after_script: node_modules/.bin/nyc report | npx coveralls
