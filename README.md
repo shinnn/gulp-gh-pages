@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/gulp-gh-pages.svg)](https://www.npmjs.com/package/gulp-gh-pages)
 [![Build Status](https://travis-ci.org/shinnn/gulp-gh-pages.svg?branch=master)](https://travis-ci.org/shinnn/gulp-gh-pages)
-[![Build status](https://ci.appveyor.com/api/projects/status/iskj8sml9luhkm21?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/gulp-gh-pages)
+[![Build status](https://ci.appveyor.com/api/projects/status/iqmi2ijhabfg0cwb/branch/master?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/gulp-gh-pages/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/shinnn/gulp-gh-pages.svg)](https://coveralls.io/github/shinnn/gulp-gh-pages)
 
 [gulp](http://gulpjs.com/) plugin to publish contents to [Github pages](https://pages.github.com/)

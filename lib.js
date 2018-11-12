@@ -16,10 +16,7 @@ async function listRemoteBranches(repo) {
 	branches.shift();
 	branches.pop();
 
-	return branches.map(branchName => {
-		branchName = branchName.trim();
-		return branchName;
-	});
+	return branches.map(branchName => branchName.trim());
 }
 
 class Git {
@@ -109,7 +106,7 @@ async function prepareRepo(remoteUrl, dir) {
 		}
 
 		return clearAndInitRepo();
-	} catch (err) {
+	} catch {
 		return clearAndInitRepo();
 	}
 }

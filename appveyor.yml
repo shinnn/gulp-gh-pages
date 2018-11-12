@@ -3,8 +3,8 @@ platform: x64
 shallow_clone: true
 skip_tags: true
 environment:
-  GH_ACCESS_TOKEN:
-    secure: 8LHqSTU/5Tp7nvthuF5w7BH5DJ4Rvl7TMYq22zPbKe9HuvxbcXMJelMzIbWlrHHV
+  GITHUB_TOKEN:
+    secure: RD143wMIh7YPILU5pHittzdojuOUqJuuZYwjwmgqsGssSGeQf+yPeWmz5lpVI34f
 install:
   - ps: Install-Product node Stable x64
   - npm ci
@@ -12,4 +12,4 @@ build: off
 before_test:
   - git config --global user.name "John Doe"
   - git config --global user.email johndoe@example.com
-test_script: npx mocha test.js --timeout 50000 --full-trace
+test_script: npx --no-install mocha test.js --timeout 50000 --full-trace

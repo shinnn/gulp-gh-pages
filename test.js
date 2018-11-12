@@ -9,8 +9,8 @@ const {readFile} = require('fs').promises;
 
 const File = require('vinyl');
 const ghPages = require('.');
-const git = require('./lib.js');
 const github = require('octonode');
+const loadGhToken = require('load-gh-token');
 const noop = require('lodash/noop');
 const readRemoveFile = require('read-remove-file');
 const rimraf = require('rimraf');
@@ -35,36 +35,13 @@ const files = [
 const tmpRepoName = 'shinnn/css-wide-keywords';
 let remoteUrl;
 
-let accessToken = process.env.GH_ACCESS_TOKEN;
+let accessToken;
 let client;
 
 before(async () => {
-	if (accessToken) {
-		client = github.client(accessToken);
-		remoteUrl = `https://${accessToken}@github.com/${tmpRepoName}.git`;
-
-		return;
-	}
-
-	const accessTokenFile = 'gh-access-token.txt';
-
-	try {
-		accessToken = (await readFile(accessTokenFile, 'utf8')).trim();
-	} catch {
-		throw new Error(`Create a plain text file "${accessTokenFile}" which contains your Github access token.`);
-	}
-
+	accessToken = await loadGhToken();
 	client = github.client(accessToken);
 	remoteUrl = `https://${accessToken}@github.com/${tmpRepoName}.git`;
-});
-
-describe('git operations on special repositories', () => {
-	before(done => rimraf(tmpDir, done));
-
-	it('should be initialized on the default branch', async () => {
-		const repo = await git.prepareRepo('https://github.com/LeaVerou/csss.git', '.publish');
-		assert.equal(repo._currentBranch, 'gh-pages');
-	});
 });
 
 describe('gulp-gh-pages', () => {
