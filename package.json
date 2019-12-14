@@ -1,6 +1,6 @@
 {
 	"name": "gulp-gh-pages",
-	"version": "0.6.0-6",
+	"version": "0.6.0-7",
 	"description": "gulp plugin to publish contents to Github pages",
 	"repository": "shinnn/gulp-gh-pages",
 	"license": "MIT",
@@ -45,9 +45,9 @@
 		"@shinnn/eslint-config": "^6.8.1",
 		"eslint": "^5.9.0",
 		"load-gh-token": "^1.0.0",
-		"lodash": "^4.17.11",
+		"lodash": "^4.17.15",
 		"mocha": "^5.2.0",
-		"nyc": "^13.1.0",
+		"nyc": "^14.1.1",
 		"nyc-config-common": "^1.0.1",
 		"octonode": "^0.9.5",
 		"read-remove-file": "^5.0.1"
